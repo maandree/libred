@@ -159,7 +159,7 @@ void libred_term_colour(void);
  * @throws  EDOM  The selected temperature is below 1000 K.
  * @throws        Any error specified for pread(3).
  */
-int libred_get_colour(long int temp, double *r, double *g, double *b);
+int libred_get_colour(long int, double*, double*, double*);
 
 
 

@@ -105,7 +105,7 @@ static void ciexyy_to_srgb(double x, double y, double Y, double *r, double *g, d
  * @param  g     Output parameter for the green value.
  * @param  b     Output parameter for the blue value.
  */
-static void interpolate(double x1, double y1, double x2, double y2, double temp, double *r, double *g, double *b)
+static void interpolate(double x1, double y1, double x2, double y2, double temp, double* r, double* g, double* b)
 {
   double weight = fmod(temp, (double)LIBRED_DELTA_TEMPERATURE) / (double)LIBRED_DELTA_TEMPERATURE;
   double x = x1 * (1 - weight) + x2 * weight;
@@ -127,7 +127,7 @@ static void interpolate(double x1, double y1, double x2, double y2, double temp,
  * @throws  EDOM  The selected temperature is below 1000 K.
  * @throws        Any error specified for pread(3).
  */
-int libred_get_colour(long int temp, double *r, double *g, double *b)
+int libred_get_colour(long int temp, double* r, double* g, double* b)
 {
   double values[10]; /* low:x,y,r,g,b + high:x,y,r,g,b */
   off_t offset;
