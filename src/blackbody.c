@@ -103,7 +103,7 @@ static void ciexyy_to_srgb(double x, double y, double Y, double *r, double *g, d
  */
 static void interpolate(double x1, double y1, double x2, double y2, double temp, double *r, double *g, double *b)
 {
-  double weight = fmod(temp, (double)DELTA_TEMPERATURE) / (double)DELTA_TEMPERATURE;
+  double weight = fmod(temp, (double)LIBRED_DELTA_TEMPERATURE) / (double)LIBRED_DELTA_TEMPERATURE;
   double x = x1 * (1 - weight) + x2 * weight;
   double y = y1 * (1 - weight) + y2 * weight;
   ciexyy_to_srgb(x, y, 1.0, r, g, b);
@@ -132,17 +132,17 @@ int libred_get_colour(long int temp, double *r, double *g, double *b)
   /* We do not have any values for above 40 000 K, but
    * the differences will be unnoticeable, perhaps even
    * unencodeable. */
-  if (temp > HIGHEST_TEMPERATURE)  temp = HIGHEST_TEMPERATURE;
+  if (temp > LIBRED_HIGHEST_TEMPERATURE)  temp = LIBRED_HIGHEST_TEMPERATURE;
   /* Things do not glow below 1000 K. Yes, fire is hot! */
-  if (temp < LOWEST_TEMPERATURE)   t ((errno = EDOM));
+  if (temp < LIBRED_LOWEST_TEMPERATURE)   t ((errno = EDOM));
   
   /* Read table. */
-  offset = ((off_t)temp - LOWEST_TEMPERATURE) / DELTA_TEMPERATURE;
+  offset = ((off_t)temp - LIBRED_LOWEST_TEMPERATURE) / LIBRED_DELTA_TEMPERATURE;
   offset *= (off_t)(sizeof(values) / 2);
   errno = 0; xpread(fd, values, sizeof(values), offset);
   
   /* Get colour. */
-  if (temp % DELTA_TEMPERATURE)
+  if (temp % LIBRED_DELTA_TEMPERATURE)
     interpolate(values[0], values[1], values[6], values[7], (double)temp, r, g, b);
   else
     *r = values[2], *g = values[3], *b = values[4];

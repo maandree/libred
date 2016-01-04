@@ -122,6 +122,8 @@ int libred_check_timetravel(void);
 
 /**
  * The temperature difference between the colours in the table.
+ * Note, `libred_get_colour` will make interpolation for colours
+ * that are not in the table.
  */
 #define LIBRED_DELTA_TEMPERATURE  100
 
