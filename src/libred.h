@@ -14,6 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef LIBRED_H
+#define LIBRED_H
+
 
 
 /**
@@ -103,5 +106,59 @@ double libred_solar_elevation(double latitude, double longitude);
 int libred_check_timetravel(void);
 #else
 # define libred_check_timetravel()  0
+#endif
+
+
+
+/**
+ * The highest colour temperature in the table.
+ */
+#define LIBRED_HIGHEST_TEMPERATURE  40000
+
+/**
+ * The lowest colour temperature in the table.
+ */
+#define LIBRED_LOWEST_TEMPERATURE  1000
+
+/**
+ * The temperature difference between the colours in the table.
+ */
+#define LIBRED_DELTA_TEMPERATURE  100
+
+
+
+/**
+ * This function must be called, once,
+ * before calling `libred_get_colour`.
+ * 
+ * @return  0 on success, -1 on error.
+ * 
+ * @throws  Any error specified for `open(3)`.
+ */
+int libred_init_colour(void);
+
+/**
+ * Call this when the process will not
+ * longer make calls to `libred_get_colour`.
+ */
+void libred_term_colour(void);
+
+/**
+ * Get the [0, 1] sRGB values of a colour temperature.
+ * 
+ * @param   temp  The desired colour temperature.
+ * @param   r     Output parameter for the “red” value.
+ * @param   g     Output parameter for the green value.
+ * @param   b     Output parameter for the blue value.
+ * @return        0 on succeess, -1 on error.
+ * 
+ * @throws  0     The file did not have the expected size.
+ * @throws  EDOM  The selected temperature is below 1000 K.
+ * @throws        Any error specified for pread(3).
+ */
+int libred_get_colour(long int temp, double *r, double *g, double *b);
+
+
+
 #endif
 
