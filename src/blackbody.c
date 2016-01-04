@@ -14,12 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef LIBRED_COMPILING_PARSER
 #include "libred.h"
 #include "macros.h"
 #include <math.h>
 #include <errno.h>
 #include <fcntl.h>
-
 
 
 /**
@@ -56,6 +56,7 @@ void libred_term_colour(void)
 }
 
 
+#endif
 /**
  * Convert from CIE xyY to [0, 1] sRGB.
  * 
@@ -84,6 +85,7 @@ static void ciexyy_to_srgb(double x, double y, double Y, double *r, double *g, d
   /* Convert [0, 1] linear RGB to [0, 1] sRGB. */
   SRGB(*r), SRGB(*g), SRGB(*b);
 }
+#ifndef LIBRED_COMPILING_PARSER
 
 
 /**
@@ -159,4 +161,5 @@ int libred_get_colour(long int temp, double *r, double *g, double *b)
  fail:
   return -1;
 }
+#endif
 

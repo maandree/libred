@@ -29,36 +29,9 @@
 
 
 
-/**
- * Convert from CIE xyY to [0, 1] sRGB.
- * 
- * This function is identical to that in 'blackbody.c'.
- * 
- * @param  x  The 'x' component.
- * @param  y  The 'y' component.
- * @param  Y  The 'Y' component.
- * @param  r  Output parameter for the “red” value.
- *            (Seriously, sRGB red is orange, just look at it fullscreen.)
- * @param  g  Output parameter for the green value.
- * @param  b  Output parameter for the blue value.
- */
-static void ciexyy_to_srgb(double x, double y, double Y, double *r, double *g, double *b)
-{
-#define SRGB(C)  (((C) <= 0.0031308) ? (12.92 * (C)) : ((1.0 + 0.055) * pow((C), 1.0 / 2.4) - 0.055))
-  double X, Z;
-  
-  /* Convert CIE xyY to CIE XYZ. */
-  X = Y * (y == 0.0 ? 0.0 : (x / y));
-  Z = Y * (y == 0.0 ? 0.0 : ((1.0 - x - y) / y));
-  
-  /* Convert CIE XYZ to [0, 1] linear RGB. (ciexyz_to_linear) */
-  *r = ( 3.240450 * X) + (-1.537140 * Y) + (-0.4985320 * Z);
-  *g = (-0.969266 * X) + ( 1.876010 * Y) + ( 0.0415561 * Z);
-  *b = (0.0556434 * X) + (-0.204026 * Y) + ( 1.0572300 * Z);
-  
-  /* Convert [0, 1] linear RGB to [0, 1] sRGB. */
-  SRGB(*r), SRGB(*g), SRGB(*b);
-}
+#define LIBRED_COMPILING_PARSER
+#include "blackbody.c"
+
 
 
 /**
