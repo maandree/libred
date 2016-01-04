@@ -16,6 +16,7 @@
  */
 #include "libred.h"
 #include "macros.h"
+#include <stdio.h>
 #include <math.h>
 #include <sys/stat.h>
 
