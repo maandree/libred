@@ -102,11 +102,7 @@ double libred_solar_elevation(double latitude, double longitude);
  * 
  * @return  0 on success, -1 on error.
  */
-#if defined(TIMETRAVELLER)
 int libred_check_timetravel(void);
-#else
-# define libred_check_timetravel()  0
-#endif
 
 
 

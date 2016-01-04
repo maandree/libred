@@ -18,6 +18,7 @@
 #include "macros.h"
 #include <math.h>
 #include <errno.h>
+#include <fcntl.h>
 
 
 

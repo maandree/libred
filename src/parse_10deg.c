@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "blackbody.h"
+#include "libred.h"
 #include "macros.h"
+#include <math.h>
 #include <sys/stat.h>
 
 
