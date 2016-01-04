@@ -22,10 +22,11 @@
 #include <fcntl.h>
 
 
+
 /**
  * The file descriptor to the colour lookup table.
  */
-static int fd = -1;
+int libred_fd = -1;
 
 
 
@@ -40,8 +41,8 @@ static int fd = -1;
 int libred_init_colour(void)
 {
   libred_term_colour();
-  fd = open(SYSDEPRESDIR "/" PACKAGE "/10deg", O_RDONLY);
-  return fd < 0 ? -1 : 0;
+  libred_fd = open(SYSDEPRESDIR "/" PACKAGE "/10deg", O_RDONLY);
+  return libred_fd < 0 ? -1 : 0;
 }
 
 
@@ -51,8 +52,8 @@ int libred_init_colour(void)
  */
 void libred_term_colour(void)
 {
-  if (fd >= 0)
-    close(fd), fd = -1;
+  if (libred_fd >= 0)
+    close(libred_fd), libred_fd = -1;
 }
 
 
@@ -142,7 +143,7 @@ int libred_get_colour(long int temp, double *r, double *g, double *b)
   /* Read table. */
   offset = ((off_t)temp - LIBRED_LOWEST_TEMPERATURE) / LIBRED_DELTA_TEMPERATURE;
   offset *= (off_t)(sizeof(values) / 2);
-  errno = 0; xpread(fd, values, sizeof(values), offset);
+  errno = 0; xpread(libred_fd, values, sizeof(values), offset);
   
   /* Get colour. */
   if (temp % LIBRED_DELTA_TEMPERATURE)

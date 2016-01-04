@@ -124,6 +124,11 @@ int libred_check_timetravel(void);
 #define LIBRED_DELTA_TEMPERATURE  100
 
 
+/**
+ * The file descriptor to the colour lookup table.
+ */
+extern int libred_fd;
+
 
 /**
  * This function must be called, once,
