@@ -21,9 +21,9 @@ and the clock is before year 2000.5 in the Julian calendar. Before
 exiting, the function will print an informative error message to
 standard error.
 .SH "RETURN VALUE"
-Upon successful completion, without time incompatibility, the returns
-0. Upon failure, that is, it is unable to read the clock, the function
-returns -1.
+Upon successful completion, without time incompatibility, the function
+returns 0. Upon failure, that is, it is unable to read the clock, the
+function returns -1.
 .SH ERRORS
 The function may fail for any reason specified for
 .BR clock_gettime (3),
