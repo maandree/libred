@@ -55,6 +55,13 @@ _CPPFLAGS += -D'PACKAGE="$(PKGNAME)"' -D'PROGRAM_VERSION="$(_VERSION)"'  \
              -D_XOPEN_SOURCE=700 -D_POSIX_C_SOURCE=200809L
 _LDFLAGS += -lm
 
+# Used by mk/man.mk
+_MAN_PAGE_SECTIONS = 0 3 7
+_MAN_0 = libred.h
+_MAN_3 = libred_check_timetravel libred_solar_elevation  \
+         libred_init_colour libred_term_colour libred_get_colour
+_MAN_7 = libred
+
 # Used by mk/copy.mk
 _COPYING = COPYING
 
