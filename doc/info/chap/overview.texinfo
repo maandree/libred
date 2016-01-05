@@ -1,0 +1,7 @@
+@node Overview
+@chapter Overview
+
+@command{libred} is a C library that can be used to calculate
+the Sun's apparent elevation, and colour temperatures, the
+colour of blackbodies.
+
