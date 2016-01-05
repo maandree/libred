@@ -160,9 +160,9 @@ void libred_term_colour(void);
  * @param   b     Output parameter for the blue value.
  * @return        0 on succeess, -1 on error.
  * 
- * @throws  0     The file did not have the expected size.
- * @throws  EDOM  The selected temperature is below 1000 K.
- * @throws        Any error specified for pread(3).
+ * @throws  EOVERFLOW  The file did not have the expected size.
+ * @throws  EDOM       The selected temperature is below 1000 K.
+ * @throws             Any error specified for pread(3).
  */
 int libred_get_colour(long int, double*, double*, double*);
 

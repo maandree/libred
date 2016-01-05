@@ -136,9 +136,9 @@ static void interpolate(double x1, double y1, double x2, double y2, double temp,
  * @param   b     Output parameter for the blue value.
  * @return        0 on succeess, -1 on error.
  * 
- * @throws  0     The file did not have the expected size.
- * @throws  EDOM  The selected temperature is below 1000 K.
- * @throws        Any error specified for pread(3).
+ * @throws  EOVERFLOW  The file did not have the expected size.
+ * @throws  EDOM       The selected temperature is below 1000 K.
+ * @throws             Any error specified for pread(3).
  */
 int libred_get_colour(long int temp, double* r, double* g, double* b)
 {
@@ -156,7 +156,7 @@ int libred_get_colour(long int temp, double* r, double* g, double* b)
   /* Read table. */
   offset = ((off_t)temp - LIBRED_LOWEST_TEMPERATURE) / LIBRED_DELTA_TEMPERATURE;
   offset *= (off_t)(sizeof(values) / 2);
-  errno = 0; xpread(libred_fd, values, sizeof(values), offset);
+  errno = EOVERFLOW; xpread(libred_fd, values, sizeof(values), offset);
   
   /* Get colour. */
   if (temp % LIBRED_DELTA_TEMPERATURE)
