@@ -125,8 +125,14 @@ int libred_check_timetravel(void);
 
 /**
  * The file descriptor to the colour lookup table.
+ * -1 if none is open.
  */
 extern int libred_fd;
+
+/**
+ * Iff this macro is define `libred_fd` is available.
+ */
+#define LIBRED_HAVE_FD  1
 
 
 /**

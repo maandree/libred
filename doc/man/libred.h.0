@@ -1,0 +1,168 @@
+.\" -*- nroff -*-
+.TH LIBRED.H 0 LIBRED "" "Library Headers"
+.SH NAME
+libred.h \- Solar elevation and blackbody colour calculation
+.SH SYNOPSIS
+.nf
+#include <libred.h>
+.fi
+.PP
+Link with
+.IR -lred .
+.SH DESCRIPTION
+The
+.I <libred.h>
+header defines macros, symbolic constants, and functions for
+calculating solar elevations and blackbody colours. All macros
+and symbolic constants in this header are suitable for use in
+.B #if
+preprocessing directives.
+.PP
+This header defines the follow symbolic constants:
+.TP
+.B LIBRED_SOLAR_APPARENT_RADIUS
+The approximate apparent size of the Sun in degrees. This
+value should be about 0.5(3).
+.TP
+.B LIBRED_SOLAR_ELEVATION_SUNSET_SUNRISE
+The Sun's elevation at sunset and sunrise, measured in degrees.
+This value will always be 0.0.
+.TP
+.B LIBRED_SOLAR_ELEVATION_CIVIL_DUSK_DAWN
+The Sun's elevation at civil dusk and civil dawn, measured in
+degrees. This value will always be -6.0.
+.TP
+.B LIBRED_SOLAR_ELEVATION_NAUTICAL_DUSK_DAWN
+The Sun's elevation at nautical dusk and nautical dawn, measured
+in degrees. This value will always be -12.0.
+.TP
+.B LIBRED_SOLAR_ELEVATION_ASTRONOMICAL_DUSK_DAWN
+The Sun's elevation at astronomical dusk and astronomical dawn,
+measured in degrees. This value will always be -18.0.
+.TP
+.B LIBRED_HIGHEST_TEMPERATURE
+The highest temperature, in kelvins, for which there is a colour
+temperature in the table of colour temperature. Any temperature
+above this is automatically truncated by
+.BR libred_get_colour (3),
+as higher values shall be unnoticeable. Currently, this value
+is 40\ 000.
+.TP
+.B LIBRED_LOWEST_TEMPERATURE
+The lowest temperature, in kelvins, for which there is a colour
+temperature in the table of colour temperature. Any temperature
+below this results in
+.BR libred_get_colour (3)
+failing and setting
+.B errno
+to
+.BR EDOM .
+Currently this value 1000, hypothetical changes will be very small.
+.TP
+.B LIBRED_DELTA_TEMPERATURE
+The temperatures differences between sequential colour temperatures
+in the colour temperatures look up table. Currently this value is 100.
+.PP
+This header defines the follow macros:
+.TP
+.BR LIBRED_IS_TWILIGHT "(const double)"
+Evaluates to 1 if the given expression is between -18.0 and 0.0 (this is,
+between
+.B LIBRED_SOLAR_ELEVATION_ASTRONOMICAL_DUSK_DAWN
+and
+.BR LIBRED_SOLAR_ELEVATION_SUNSET_SUNRISE ),
+inclusively, other wise, this macro evaluates to 0. The input should be the
+Sun's apparent elevation, and the macro evaluates to 1 if it is currently
+twilight. The given expression is evaluted either once or twice, therefore,
+it must not have side-effects.
+.TP
+.BR LIBRED_IS_CIVIL_TWILIGHT "(const double)"
+Evaluates to 1 if the given expression is between -6.0 and 0.0 (this is,
+between
+.B LIBRED_SOLAR_ELEVATION_CIVIL_DUSK_DAWN
+and
+.BR LIBRED_SOLAR_ELEVATION_SUNSET_SUNRISE ),
+inclusively, other wise, this macro evaluates to 0. The input should be the
+Sun's apparent elevation, and the macro evaluates to 1 if it is currently
+civil twilight. The given expression is evaluted either once or twice,
+therefore, it must not have side-effects.
+.TP
+.BR LIBRED_IS_NAUTICAL_TWILIGHT "(const double)"
+Evaluates to 1 if the given expression is between -12.0 and -6.0 (this is,
+between
+.B LIBRED_SOLAR_ELEVATION_NAUTICAL_DUSK_DAWN
+and
+.BR LIBRED_SOLAR_ELEVATION_CIVIL_DUSK_DAWN ),
+inclusively, other wise, this macro evaluates to 0. The input should be the
+Sun's apparent elevation, and the macro evaluates to 1 if it is currently
+nautical twilight. The given expression is evaluted either once or twice,
+therefore, it must not have side-effects.
+.TP
+.BR LIBRED_IS_ASTRONOMICAL_TWILIGHT "(const double)"
+Evaluates to 1 if the given expression is between -18.0 and -12.0 (this is,
+between
+.B LIBRED_SOLAR_ELEVATION_ASTRONOMICAL_DUSK_DAWN
+and
+.BR LIBRED_SOLAR_ELEVATION_NAUTICAL_DUSK_DAWN ),
+inclusively, other wise, this macro evaluates to 0. The input should be the
+Sun's apparent elevation, and the macro evaluates to 1 if it is currently
+astronomical twilight. The given expression is evaluted either once or twice,
+therefore, it must not have side-effects.
+.PP
+Note that the intervals are closed, and hence their boundaries overlap.
+This is intentional. If it is not twilight it is either daytime or night.
+It is night only if the Sun's apparent elevation is negative.
+.PP
+This header defines the following functions:
+.TP
+*
+.BR libred_solar_elevation (3)
+.TP
+*
+.BR libred_check_timetravel (3)
+.TP
+*
+.BR libred_init_colour (3)
+.TP
+*
+.BR libred_term_colour (3)
+.TP
+*
+.BR libred_get_colour (3)
+.PP
+This header may define
+.B extern int libred_fd
+iff it does it also defines the macro
+.BR LIBRED_HAVE_FD .
+If it does, you want to keep this file descriptor open when you daemonise
+your process. It is set by
+.BR libred_init_colour (3)
+and unset by
+.BR libred_term_colour (3).
+It value is negative (more precisely it is -1) if no file descriptor has
+been opened.
+.SH "FUTURE DIRECTIONS"
+None.
+.SH "SEE ALSO"
+.BR libred_solar_elevation (3),
+.BR libred_check_timetravel (3),
+.BR libred_init_colour (3),
+.BR libred_term_colour (3),
+.BR libred_get_colour (3)
+.SH LICENSE
+Copyright \(co 2016  Mattias Andrée
+.br
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+.br
+This is free software: you are free to change and redistribute it.
+.br
+There is NO WARRANTY, to the extent permitted by law.
+.PP
+Copying and distribution of this manual, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.  This file is offered as-is,
+without any warranty.
+.SH BUGS
+Please report bugs to <https://github.com/maandree/libred/issues>
+or to <maandree@member.fsf.org>.
+
