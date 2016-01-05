@@ -80,7 +80,7 @@
 
 
 /**
- * Calculates the Sun's elevation as apparent.
+ * Calculates the Sun's elevation as apparent
  * from a geographical position.
  * 
  * @param   latitude   The latitude in degrees northwards from 

@@ -245,7 +245,7 @@ static inline double equation_of_time(double tm)
 }
 
 /**
- * Calculates the Sun's elevation as apparent.
+ * Calculates the Sun's elevation as apparent
  * from a geographical position.
  * 
  * @param   tm         The time in Julian Centuries.
@@ -267,7 +267,7 @@ static inline double solar_elevation_from_time(double tm, double latitude, doubl
 
 
 /**
- * Calculates the Sun's elevation as apparent.
+ * Calculates the Sun's elevation as apparent
  * from a geographical position.
  * 
  * @param   latitude   The latitude in degrees northwards from 
