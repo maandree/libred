@@ -62,7 +62,7 @@ _COPYING = COPYING
 _EVERYTHING = $(__EVERYTHING_ALL_COMMON) DEPENDENCIES INSTALL NEWS  \
               $(foreach F,$(___EVERYTHING_INFO),doc/info/$(F).texinfo)  \
               src/10deg src/blackbody.c src/libred.h src/macros.h  \
-              src/parse_10deg.c src/solar.c
+              src/parse_10deg.c src/solar.c src/libred.librarian src/libred.pc
 
 # }}
 
@@ -71,24 +71,46 @@ _EVERYTHING = $(__EVERYTHING_ALL_COMMON) DEPENDENCIES INSTALL NEWS  \
 include $(v)mk/all.mk
 
 # And our non-reusable make rules.
+
 bin/parse_10deg: src/parse_10deg.c | src/blackbody.c
 base: data
 data: bin/10deg
-install-base: install-data
+install-base: install-data install-librarian install-pc
 install-data: install-10deg
-uninstall: uninstall-data
+uninstall: uninstall-data uninstall-librarian uninstall-pc
 uninstall-data: install-10deg
+
 bin/10deg: src/10deg bin/parse_10deg
 	@$(PRINTF_INFO) '\e[00;01;31mGEN\e[34m %s\e[00m$A\n' "$@"
 	@$(MKDIR) -p $(shell $(DIRNAME) $@)
 	$(Q)bin/parse_10deg < src/10deg > $@ #$Z
 	@$(ECHO_EMPTY)
+
 install-10deg: bin/10deg
 	@$(PRINTF_INFO) '\e[00;01;31mINSTALL\e[34m %s\e[00m\n' "$@"
 	$(Q)$(INSTALL_DIR) -- "$(DESTDIR)$(SYSDEPRESDIR)/$(PKGNAME)"
 	$(Q)$(INSTALL_DATA) bin/10deg -- "$(DESTDIR)$(SYSDEPRESDIR)/$(PKGNAME)/10deg"
 	@$(ECHO_EMPTY)
+
+install-librarian: src/libred.librarian
+	@$(PRINTF_INFO) '\e[00;01;31mINSTALL\e[34m %s\e[00m\n' "$@"
+	$(Q)$(INSTALL_DIR) -- "$(DESTDIR)$(DATADIR)/librarian"
+	$(Q)$(INSTALL_DATA) $^ -- "$(DESTDIR)$(DATADIR)/librarian/libred=$(_SO_VERSION_libred)"
+	@$(ECHO_EMPTY)
+
+install-pc: src/libred.pc
+	@$(PRINTF_INFO) '\e[00;01;31mINSTALL\e[34m %s\e[00m\n' "$@"
+	$(Q)$(INSTALL_DIR) -- "$(DESTDIR)$(SYSDEPDATADIR)/pkgconfig"
+	$(Q)$(INSTALL_DATA) $^ -- "$(DESTDIR)$(SYSDEPDATADIR)/pkgconfig/libred.pc"
+	@$(ECHO_EMPTY)
+
 uninstall-10deg:
 	-$(Q)$(RM) -- "$(DESTDIR)$(SYSDEPRESDIR)/$(PKGNAME)/10deg"
 	-$(Q)$(RMDIR) -- "$(DESTDIR)$(SYSDEPRESDIR)/$(PKGNAME)"
+
+uninstall-librarian:
+	-$(Q)$(RM) -- "$(DESTDIR)$(DATADIR)/librarian/libred=$(_SO_VERSION_libred)"
+
+uninstall-pc:
+	-$(Q)$(RM) -- "$(DESTDIR)$(SYSDEPDATADIR)/pkgconfig/libred.pc"
 
