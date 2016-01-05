@@ -51,7 +51,9 @@ _SO_VERSION_libred = $(_VERSION)
 _SO_MAJOR_libred = $(shell echo $(_SO_VERSION_libred) | cut -d . -f 1)
 _H = libred
 _HEADER_DIRLEVELS = 1
-_CPPFLAGS = -D'PACKAGE="$(PKGNAME)"' -D'PROGRAM_VERSION="$(_VERSION)"'
+_CPPFLAGS += -D'PACKAGE="$(PKGNAME)"' -D'PROGRAM_VERSION="$(_VERSION)"'  \
+             -D_XOPEN_SOURCE=700 -D_POSIX_C_SOURCE=200809L
+_LDFLAGS += -lm
 
 # Used by mk/copy.mk
 _COPYING = COPYING
@@ -69,7 +71,7 @@ _EVERYTHING = $(__EVERYTHING_ALL_COMMON) DEPENDENCIES INSTALL NEWS  \
 include $(v)mk/all.mk
 
 # And our non-reusable make rules.
-bin/parse_10deg: parse_10deg.c blackbody.c
+bin/parse_10deg: src/parse_10deg.c | src/blackbody.c
 base: data
 data: bin/10deg
 install-base: install-data
@@ -79,7 +81,7 @@ uninstall-data: install-10deg
 bin/10deg: src/10deg bin/parse_10deg
 	@$(PRINTF_INFO) '\e[00;01;31mGEN\e[34m %s\e[00m$A\n' "$@"
 	@$(MKDIR) -p $(shell $(DIRNAME) $@)
-	$(Q)bin/parse_10deg < src/10deg > $* #$Z
+	$(Q)bin/parse_10deg < src/10deg > $@ #$Z
 	@$(ECHO_EMPTY)
 install-10deg: bin/10deg
 	@$(PRINTF_INFO) '\e[00;01;31mINSTALL\e[34m %s\e[00m\n' "$@"
