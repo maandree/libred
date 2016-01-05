@@ -79,7 +79,6 @@
 #define LIBRED_IS_ASTRONOMICAL_TWILIGHT(ELEV)  ((-18.0 <= (ELEV)) && ((ELEV) <= -12.0))
 
 
-
 /**
  * Calculates the Sun's elevation as apparent.
  * from a geographical position.
