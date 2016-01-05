@@ -93,7 +93,7 @@
  * @throws  0  On success.
  * @throws     Any error specified for clock_gettime(3) on error.
  */
-double libred_solar_elevation(double latitude, double longitude);
+double libred_solar_elevation(double, double);
 
 
 /**
