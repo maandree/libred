@@ -6,5 +6,5 @@ DESCRIPTION
 	elevation and colours temperatures.
 
 SEE ALSO
-	solar-python, redshift(1), blueshift(1), libgamma(1)
+	solar-python(7), redshift(1), blueshift(1), libgamma(7)
 
