@@ -71,7 +71,7 @@ between
 .B LIBRED_SOLAR_ELEVATION_ASTRONOMICAL_DUSK_DAWN
 and
 .BR LIBRED_SOLAR_ELEVATION_SUNSET_SUNRISE ),
-inclusively, other wise, this macro evaluates to 0. The input should be the
+inclusively, otherwise, this macro evaluates to 0. The input should be the
 Sun's apparent elevation, and the macro evaluates to 1 if it is currently
 twilight. The given expression is evaluted either once or twice, therefore,
 it must not have side-effects.
@@ -82,7 +82,7 @@ between
 .B LIBRED_SOLAR_ELEVATION_CIVIL_DUSK_DAWN
 and
 .BR LIBRED_SOLAR_ELEVATION_SUNSET_SUNRISE ),
-inclusively, other wise, this macro evaluates to 0. The input should be the
+inclusively, otherwise, this macro evaluates to 0. The input should be the
 Sun's apparent elevation, and the macro evaluates to 1 if it is currently
 civil twilight. The given expression is evaluted either once or twice,
 therefore, it must not have side-effects.
@@ -93,7 +93,7 @@ between
 .B LIBRED_SOLAR_ELEVATION_NAUTICAL_DUSK_DAWN
 and
 .BR LIBRED_SOLAR_ELEVATION_CIVIL_DUSK_DAWN ),
-inclusively, other wise, this macro evaluates to 0. The input should be the
+inclusively, otherwise, this macro evaluates to 0. The input should be the
 Sun's apparent elevation, and the macro evaluates to 1 if it is currently
 nautical twilight. The given expression is evaluted either once or twice,
 therefore, it must not have side-effects.
@@ -104,7 +104,7 @@ between
 .B LIBRED_SOLAR_ELEVATION_ASTRONOMICAL_DUSK_DAWN
 and
 .BR LIBRED_SOLAR_ELEVATION_NAUTICAL_DUSK_DAWN ),
-inclusively, other wise, this macro evaluates to 0. The input should be the
+inclusively, otherwise, this macro evaluates to 0. The input should be the
 Sun's apparent elevation, and the macro evaluates to 1 if it is currently
 astronomical twilight. The given expression is evaluted either once or twice,
 therefore, it must not have side-effects.

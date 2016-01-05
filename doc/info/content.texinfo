@@ -9,6 +9,10 @@
 
 @menu
 * Overview::                                Brief overview of @command{libred}.
+* Constants::                               Symbolic constants in @file{<libred.h>}.
+* Macros::                                  Macros in @file{<libred.h>}.
+* Functions::                               Functions in @file{<libred.h>}.
+* Variables::                               External variables in @file{<libred.h>}.
 
 * Free Software Needs Free Documentation::  Why free documentation is important.
 * GNU General Public License::              Copying and sharing @command{libred}.
@@ -18,6 +22,10 @@
 
 
 @include chap/overview.texinfo
+@include chap/constants.texinfo
+@include chap/macros.texinfo
+@include chap/functions.texinfo
+@include chap/variables.texinfo
 
 @include appx/free-software-needs-free-documentation.texinfo
 

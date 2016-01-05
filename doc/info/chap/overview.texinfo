@@ -5,3 +5,9 @@
 the Sun's apparent elevation, and colour temperatures, the
 colour of blackbodies.
 
+To use @command{libred}, include the header file
+@file{<libred.h>}, and link with @option{-lred}. The
+@command{libred} package includes a @command{librarian}
+file and a @command{pkgconfig} file, both named
+@command{libred}.
+
