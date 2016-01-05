@@ -1,0 +1,10 @@
+NAME
+	libred - Solar elevation and blackbody colour calculation
+
+DESCRIPTION
+	libred is a C library for calculating the Sun's apparent
+	elevation and colours temperatures.
+
+SEE ALSO
+	solar-python, redshift(1), blueshift(1), libgamma(1)
+
