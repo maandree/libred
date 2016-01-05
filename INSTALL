@@ -66,6 +66,7 @@ to install. This rules are available:
 ├─────────────┼─────────────────────┼────────────────────────────────────────────┤
 │ base        │ install-base        │ Install the basics:                        │
 │   lib       │   install-lib       │   Install the libred library.              │
+│   data      │   install-data      │   Install the resourcs.                    │
 │             │   install-copyright │   Install the Expat License.               │
 │ doc         │ install-doc         │ Include all manuals:                       │
 │   info      │   install-info      │   Include info manual. (Texinfo)           │

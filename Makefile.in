@@ -1,0 +1,92 @@
+# Copyright (C) 2016  Mattias Andrée <maandree@member.fsf.org>
+# 
+# Copying and distribution of this file, with or without modification,
+# are permitted in any medium without royalty provided the copyright
+# notice and this notice are preserved.  This file is offered as-is,
+# without any warranty.
+
+
+### This file will be stored to Makefile once you have run ./configure. ###
+### See INSTALL for information on how to install this package.         ###
+
+
+
+##### What is below this line is configurable, but is seldom useful. #####
+
+
+# Additional options for compiling info and HTML manuals.
+INFO_FLAGS =
+
+# Additional options for compiling DVI, PDF, and PostScript manuals.
+TEXINFO_FLAGS =
+
+# The name of the package as it should be installed.
+PKGNAME = libred
+
+
+
+##### Nothing interesting below this. #####
+
+
+# In case you want add some configurations. Primarily
+# intended for maintainers. Perhaps add GPG_KEY here.
+# Of course, you can declare everthing with ./configure,
+# but with this you are less likely to forget it.
+-include .make-configurations
+
+
+# YOU, AS A USER, SHOULD NOT CHANGE THESE VARIABLES. {{
+# They specify how the reusable makefiles in mk/ shall behave.
+
+# Package information.
+_PROJECT = libred
+_VERSION = 1.0
+
+# Used by mk/lang-c.mk
+_C_STD = c99
+_PEDANTIC = yes
+_LIB = libred
+_OBJ_libred = blackbody solar
+_SO_VERSION_libred = $(_VERSION)
+_SO_MAJOR_libred = $(shell echo $(_SO_VERSION_libred) | cut -d . -f 1)
+_H = libred
+_HEADER_DIRLEVELS = 1
+_CPPFLAGS = -D'PACKAGE="$(PKGNAME)"' -D'PROGRAM_VERSION="$(_VERSION)"'
+
+# Used by mk/copy.mk
+_COPYING = COPYING
+
+# Used by mk/dist.mk
+_EVERYTHING = $(__EVERYTHING_ALL_COMMON) DEPENDENCIES INSTALL NEWS  \
+              $(foreach F,$(___EVERYTHING_INFO),doc/info/$(F).texinfo)  \
+              src/10deg src/blackbody.c src/libred.h src/macros.h  \
+              src/parse_10deg.c src/solar.c
+
+# }}
+
+
+# Reusable make rules and the configurations.
+include $(v)mk/all.mk
+
+# And our non-reusable make rules.
+bin/parse_10deg: parse_10deg.c blackbody.c
+base: data
+data: bin/10deg
+install-base: install-data
+install-data: install-10deg
+uninstall: uninstall-data
+uninstall-data: install-10deg
+bin/10deg: src/10deg bin/parse_10deg
+	@$(PRINTF_INFO) '\e[00;01;31mGEN\e[34m %s\e[00m$A\n' "$@"
+	@$(MKDIR) -p $(shell $(DIRNAME) $@)
+	$(Q)bin/parse_10deg < src/10deg > $* #$Z
+	@$(ECHO_EMPTY)
+install-10deg: bin/10deg
+	@$(PRINTF_INFO) '\e[00;01;31mINSTALL\e[34m %s\e[00m\n' "$@"
+	$(Q)$(INSTALL_DIR) -- "$(DESTDIR)$(SYSDEPRESDIR)/$(PKGNAME)"
+	$(Q)$(INSTALL_DATA) bin/10deg -- "$(DESTDIR)$(SYSDEPRESDIR)/$(PKGNAME)/10deg"
+	@$(ECHO_EMPTY)
+uninstall-10deg:
+	-$(Q)$(RM) -- "$(DESTDIR)$(SYSDEPRESDIR)/$(PKGNAME)/10deg"
+	-$(Q)$(RMDIR) -- "$(DESTDIR)$(SYSDEPRESDIR)/$(PKGNAME)"
+
