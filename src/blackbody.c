@@ -14,6 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#if __GNUC__
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wunsuffixed-float-constants"
+#endif
+
+
 #ifndef LIBRED_COMPILING_PARSER
 #include "libred.h"
 #include "macros.h"
@@ -74,9 +80,16 @@ static void ciexyy_to_srgb(double x, double y, double Y, double *r, double *g, d
 #define SRGB(C)  (((C) <= 0.0031308) ? (12.92 * (C)) : ((1.0 + 0.055) * pow((C), 1.0 / 2.4) - 0.055))
   double X, Z;
   
+#if __GNUC__
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wfloat-equal"
+#endif
   /* Convert CIE xyY to CIE XYZ. */
   X = Y * (y == 0.0 ? 0.0 : (x / y));
   Z = Y * (y == 0.0 ? 0.0 : ((1.0 - x - y) / y));
+#if __GNUC__
+# pragma GCC diagnostic pop
+#endif
   
   /* Convert CIE XYZ to [0, 1] linear RGB. (ciexyz_to_linear) */
   *r = ( 3.240450 * X) + (-1.537140 * Y) + (-0.4985320 * Z);
@@ -153,7 +166,14 @@ int libred_get_colour(long int temp, double* r, double* g, double* b)
   
   /* Adjust colours for use. */
   max = fmax(fmax(fabs(*r), fabs(*g)), fabs(*b));
-  if (max != 0)  *r /= max, *g /= max, *b /= max;
+#if __GNUC__
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wfloat-equal"
+#endif
+  if (max != 0.0)  *r /= max, *g /= max, *b /= max;
+#if __GNUC__
+# pragma GCC diagnostic pop
+#endif
   *r = *r > 0.0 ? *r : 0.0;
   *g = *g > 0.0 ? *g : 0.0;
   *b = *b > 0.0 ? *b : 0.0;
@@ -162,5 +182,10 @@ int libred_get_colour(long int temp, double* r, double* g, double* b)
  fail:
   return -1;
 }
+#endif
+
+
+#if __GNUC__
+# pragma GCC diagnostic pop
 #endif
 

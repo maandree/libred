@@ -23,6 +23,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#if __GNUC__
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wunsuffixed-float-constants"
+#endif
+
 
 
 /* Select clock. */
@@ -301,4 +306,9 @@ int libred_check_timetravel(void)
 #endif
   return 0;
 }
+
+
+#if __GNUC__
+# pragma GCC diagnostic pop
+#endif
 
