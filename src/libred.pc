@@ -1,0 +1,4 @@
+Version: 1.0
+Name: libred
+Description: Solar elevation tracking and blackbody colours
+Libs: -lm -lred
