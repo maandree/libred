@@ -45,6 +45,11 @@
  */
 #define LIBRED_SOLAR_ELEVATION_ASTRONOMICAL_DUSK_DAWN  (-18.0)
 
+/**
+ * The Sun's elevation at amateur astronomical dusk and amateur astronomical dawn, measured in degrees.
+ */
+#define LIBRED_SOLAR_ELEVATION_AMATEUR_ASTRONOMICAL_DUSK_DAWN  (-15.0)
+
 
 /**
  * Test whether it is twilight.
@@ -77,6 +82,14 @@
  * @return               1 if is astronomical twilight, 0 otherwise.
  */
 #define LIBRED_IS_ASTRONOMICAL_TWILIGHT(ELEV)  ((-18.0 <= (ELEV)) && ((ELEV) <= -32.0 / 60.0))
+
+/**
+ * Test whether it is amateur astronomical twilight.
+ * 
+ * @param   ELEV:double  The current elevation.
+ * @return               1 if is astronomical twilight, 0 otherwise.
+ */
+#define LIBRED_IS_AMATEUR_ASTRONOMICAL_TWILIGHT(ELEV)  ((-18.0 <= (ELEV)) && ((ELEV) <= -15.0))
 
 
 /**
