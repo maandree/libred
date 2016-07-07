@@ -87,9 +87,25 @@
  * Test whether it is amateur astronomical twilight.
  * 
  * @param   ELEV:double  The current elevation.
- * @return               1 if is astronomical twilight, 0 otherwise.
+ * @return               1 if is amatuer astronomical twilight, 0 otherwise.
  */
 #define LIBRED_IS_AMATEUR_ASTRONOMICAL_TWILIGHT(ELEV)  ((-18.0 <= (ELEV)) && ((ELEV) <= -15.0))
+
+/**
+ * Test whether it is nighttime.
+ * 
+ * @param   ELEV:double  The current elevation.
+ * @return               1 if is nighttime, 0 otherwise.
+ */
+#define LIBRED_IS_NIGHTTIME(ELEV)  ((ELEV) < -18.0)
+
+/**
+ * Test whether it is daytime.
+ * 
+ * @param   ELEV:double  The current elevation.
+ * @return               1 if is daytime, 0 otherwise.
+ */
+#define LIBRED_IS_DAYTIME(ELEV)  ((ELEV) > -32.0 / 60.0)
 
 
 /**
