@@ -28,7 +28,7 @@
 /**
  * The Sun's elevation at sunset and sunrise, measured in degrees.
  */
-#define LIBRED_SOLAR_ELEVATION_SUNSET_SUNRISE   (0.0)
+#define LIBRED_SOLAR_ELEVATION_SUNSET_SUNRISE   (-32.0 / 60.0)
 
 /**
  * The Sun's elevation at civil dusk and civil dawn, measured in degrees.
@@ -52,7 +52,7 @@
  * @param   ELEV:double  The current elevation.
  * @return               1 if is twilight, 0 otherwise.
  */
-#define LIBRED_IS_TWILIGHT(ELEV)  ((-18.0 <= (ELEV)) && ((ELEV) <= 0.0))
+#define LIBRED_IS_TWILIGHT(ELEV)  ((-18.0 <= (ELEV)) && ((ELEV) <= -32.0 / 60.0))
 
 /**
  * Test whether it is civil twilight.
@@ -60,7 +60,7 @@
  * @param   ELEV:double  The current elevation.
  * @return               1 if is civil twilight, 0 otherwise.
  */
-#define LIBRED_IS_CIVIL_TWILIGHT(ELEV)  ((-6.0 <= (ELEV)) && ((ELEV) <= 0.0))
+#define LIBRED_IS_CIVIL_TWILIGHT(ELEV)  ((-6.0 <= (ELEV)) && ((ELEV) <= -32.0 / 60.0))
 
 /**
  * Test whether it is nautical twilight.
@@ -68,7 +68,7 @@
  * @param   ELEV:double  The current elevation.
  * @return               1 if is nautical twilight, 0 otherwise.
  */
-#define LIBRED_IS_NAUTICAL_TWILIGHT(ELEV)  ((-12.0 <= (ELEV)) && ((ELEV) <= -6.0))
+#define LIBRED_IS_NAUTICAL_TWILIGHT(ELEV)  ((-12.0 <= (ELEV)) && ((ELEV) <= -32.0 / 60.0))
 
 /**
  * Test whether it is astronomical twilight.
@@ -76,7 +76,7 @@
  * @param   ELEV:double  The current elevation.
  * @return               1 if is astronomical twilight, 0 otherwise.
  */
-#define LIBRED_IS_ASTRONOMICAL_TWILIGHT(ELEV)  ((-18.0 <= (ELEV)) && ((ELEV) <= -12.0))
+#define LIBRED_IS_ASTRONOMICAL_TWILIGHT(ELEV)  ((-18.0 <= (ELEV)) && ((ELEV) <= -32.0 / 60.0))
 
 
 /**
