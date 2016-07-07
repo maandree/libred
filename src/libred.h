@@ -50,6 +50,26 @@
  */
 #define LIBRED_SOLAR_ELEVATION_AMATEUR_ASTRONOMICAL_DUSK_DAWN  (-15.0)
 
+/**
+ * The Sun's lowest elevation during the golden hour, measured in degrees.
+ */
+#define LIBRED_SOLAR_ELEVATION_GOLDEN_HOUR_LOW  (-4.0)
+
+/**
+ * The Sun's highest elevation during the golden hour, measured in degrees.
+ */
+#define LIBRED_SOLAR_ELEVATION_GOLDEN_HOUR_HIGH  (6.0)
+
+/**
+ * The Sun's lowest elevation during the blue hour, measured in degrees.
+ */
+#define LIBRED_SOLAR_ELEVATION_BLUE_HOUR_LOW  (-6.0)
+
+/**
+ * The Sun's highest elevation during the blue hour, measured in degrees.
+ */
+#define LIBRED_SOLAR_ELEVATION_BLUE_HOUR_HIGH  (-4.0)
+
 
 /**
  * Test whether it is twilight.
@@ -106,6 +126,22 @@
  * @return               1 if is daytime, 0 otherwise.
  */
 #define LIBRED_IS_DAYTIME(ELEV)  ((ELEV) > -32.0 / 60.0)
+
+/**
+ * Test whether it is the golden hour.
+ * 
+ * @param   ELEV:double  The current elevation.
+ * @return               1 if is golden hour, 0 otherwise.
+ */
+#define LIBRED_IS_GOLDEN_HOUR(ELEV)  ((-4.0 <= (ELEV)) && ((ELEV) <= 6.0))
+
+/**
+ * Test whether it is the blue hour.
+ * 
+ * @param   ELEV:double  The current elevation.
+ * @return               1 if is blue hour, 0 otherwise.
+ */
+#define LIBRED_IS_BLUE_HOUR(ELEV)  ((-6.0 <= (ELEV)) && ((ELEV) <= -4.0))
 
 
 /**
