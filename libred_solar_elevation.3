@@ -1,0 +1,40 @@
+.TH LIBRED_SOLAR_ELEVATION 3 LIBRED
+.SH NAME
+libred_solar_elevation \- Calculate the Sun's apparent elevation
+.SH SYNOPSIS
+.nf
+#include <libred.h>
+
+int \fBlibred_solar_elevation\fP(double \fIlatitude\fP, double \fIlongitude\fP, double *\felevation\fP);
+.fi
+.PP
+Link with
+.IR -lred .
+.SH DESCRIPTION
+.BR libred_solar_elevation ()
+calculates the Sun's elevation, and stores it, measured in degrees, in
+.IR *elevation ,
+as apparent from a selected geographical position, namely from
+.I latitude
+degrees north of GPS's equator and
+.I longitude
+degrees east of GPS's prime meridian. The function is only
+explicitly defined for values between -90 and +90 for
+.I latitude
+and values between -180 and +180 for and
+.IR longitude .
+Other values may or may not work, no error is thrown if used.
+.SH RETURN VALUE
+Upon successful completion, the 
+.BR libred_solar_elevation ()
+return 0, on failure it returns -1 and sets
+.I errno
+to indicate the error.
+.SH ERRORS
+The function may fail for any reason specified for
+.BR clock_gettime (3).
+.SH SEE ALSO
+.BR libred.h (0),
+.BR libred (7),
+.BR libred_check_timetravel (3),
+.BR libred_get_colour (3)

@@ -11,8 +11,6 @@
 # pragma GCC diagnostic ignored "-Wunsuffixed-float-constants"
 #endif
 
-
-
 /* Select clock. */
 #if defined(DO_NOT_USE_COARSEC_CLOCK) || !defined(CLOCK_REALTIME_COARSE)
 # ifdef CLOCK_REALTIME_COARSE
@@ -21,30 +19,26 @@
 # define CLOCK_REALTIME_COARSE  CLOCK_REALTIME
 #endif
 
-
-
 /**
- * Get current Julian Centuries time (100 Julian days since J2000.)
+ * Get current Julian Centuries time (100 Julian days since J2000)
  * 
- * @return  The current Julian Centuries time.
- * 
- * @throws  0  On success.
- * @throws     Any error specified for clock_gettime(3) on error.
+ * @param   nowp  Output parameter for the current Julian Centuries time
+ * @return        0 on success, -1 on failure
+ * @throws        Any error specified for clock_gettime(3) on error
  */
 static double
-julian_centuries()
+julian_centuries(double *nowp)
 {
 	struct timespec now;
-	double tm;
 	if (clock_gettime(CLOCK_REALTIME_COARSE, &now))
-		return 0.0;
-	tm = (double)(now.tv_nsec) / 1000000000.0 + (double)(now.tv_sec);
-	tm = (tm / 86400.0 + 2440587.5 - 2451545.0) / 36525.0;
-	return errno = 0, tm;
+		return -1;
+	*nowp = (double)(now.tv_nsec) / 1000000000.0 + (double)(now.tv_sec);
+	*nowp = (*nowp / 86400.0 + 2440587.5 - 2451545.0) / 36525.0;
+	return 0;
 }
 
 /**
- * Convert a Julian Centuries timestamp to a Julian Day timestamp.
+ * Convert a Julian Centuries timestamp to a Julian Day timestamp
  * 
  * @param   tm  The time in Julian Centuries
  * @return      The time in Julian Days
@@ -57,7 +51,7 @@ julian_centuries_to_julian_day(double tm)
 
 
 /**
- * Convert an angle (or otherwise) from degrees to radians.
+ * Convert an angle (or otherwise) from degrees to radians
  * 
  * @param  deg  The angle in degrees.
  * @param       The angle in radians.
@@ -69,7 +63,7 @@ radians(double deg)
 }
 
 /**
- * Convert an angle (or otherwise) from radians to degrees.
+ * Convert an angle (or otherwise) from radians to degrees
  * 
  * @param  rad  The angle in radians.
  * @param       The angle in degrees.
@@ -84,11 +78,11 @@ degrees(double rad)
 /**
  * Calculates the Sun's elevation from the solar hour angle
  * 
- * @param   longitude    The longitude in degrees eastwards.
- *                       from Greenwich, negative for westwards.
- * @param   declination  The declination, in radians.
- * @param   hour_angle   The solar hour angle, in radians.
- * @return               The Sun's elevation, in radians.
+ * @param   longitude    The longitude in degrees eastwards
+ *                       from Greenwich, negative for westwards
+ * @param   declination  The declination, in radians
+ * @param   hour_angle   The solar hour angle, in radians
+ * @return               The Sun's elevation, in radians
  */
 static inline double
 elevation_from_hour_angle(double latitude, double declination, double hour_angle)
@@ -100,10 +94,10 @@ elevation_from_hour_angle(double latitude, double declination, double hour_angle
 }
 
 /**
- * Calculates the Sun's geometric mean longitude.
+ * Calculates the Sun's geometric mean longitude
  * 
- * @param   tm  The time in Julian Centuries.
- * @return      The Sun's geometric mean longitude in radians.
+ * @param   tm  The time in Julian Centuries
+ * @return      The Sun's geometric mean longitude in radians
  */
 static inline double
 sun_geometric_mean_longitude(double tm)
@@ -116,10 +110,10 @@ sun_geometric_mean_longitude(double tm)
 }
 
 /**
- * Calculates the Sun's geometric mean anomaly.
+ * Calculates the Sun's geometric mean anomaly
  * 
- * @param   tm  The time in Julian Centuries.
- * @return      The Sun's geometric mean anomaly in radians.
+ * @param   tm  The time in Julian Centuries
+ * @return      The Sun's geometric mean anomaly in radians
  */
 static inline double
 sun_geometric_mean_anomaly(double tm)
@@ -128,10 +122,10 @@ sun_geometric_mean_anomaly(double tm)
 }
 
 /**
- * Calculates the Earth's orbit eccentricity.
+ * Calculates the Earth's orbit eccentricity
  * 
- * @param   tm  The time in Julian Centuries.
- * @return      The Earth's orbit eccentricity.
+ * @param   tm  The time in Julian Centuries
+ * @return      The Earth's orbit eccentricity
  */
 static inline double
 earth_orbit_eccentricity(double tm)
@@ -141,10 +135,10 @@ earth_orbit_eccentricity(double tm)
 
 /**
  * Calculates the Sun's equation of the centre, the difference
- * between the true anomaly and the mean anomaly.
+ * between the true anomaly and the mean anomaly
  * 
- * @param   tm  The time in Julian Centuries.
- * @return      The Sun's equation of the centre, in radians.
+ * @param   tm  The time in Julian Centuries
+ * @return      The Sun's equation of the centre, in radians
  */
 static inline double
 sun_equation_of_centre(double tm)
@@ -157,10 +151,10 @@ sun_equation_of_centre(double tm)
 }
 
 /**
- * Calculates the Sun's real longitudinal position.
+ * Calculates the Sun's real longitudinal position
  * 
- * @param   tm  The time in Julian Centuries.
- * @return      The longitude, in radians.
+ * @param   tm  The time in Julian Centuries
+ * @return      The longitude, in radians
  */
 static inline double
 sun_real_longitude(double tm)
@@ -169,10 +163,10 @@ sun_real_longitude(double tm)
 }
 
 /**
- * Calculates the Sun's apparent longitudinal position.
+ * Calculates the Sun's apparent longitudinal position
  * 
- * @param   tm  The time in Julian Centuries.
- * @return      The longitude, in radians.
+ * @param   tm  The time in Julian Centuries
+ * @return      The longitude, in radians
  */
 static inline double
 sun_apparent_longitude(double tm)
@@ -183,10 +177,10 @@ sun_apparent_longitude(double tm)
 
 /**
  * Calculates the mean ecliptic obliquity of the Sun's
- * apparent motion without variation correction.
+ * apparent motion without variation correction
  * 
- * @param   tm  The time in Julian Centuries.
- * @return      The uncorrected mean obliquity, in radians.
+ * @param   tm  The time in Julian Centuries
+ * @return      The uncorrected mean obliquity, in radians
  */
 static double
 mean_ecliptic_obliquity(double tm)
@@ -197,10 +191,10 @@ mean_ecliptic_obliquity(double tm)
 
 /**
  * Calculates the mean ecliptic obliquity of the Sun's
- * parent motion with variation correction.
+ * parent motion with variation correction
  * 
- * @param   tm  The time in Julian Centuries.
- * @return      The mean obliquity, in radians.
+ * @param   tm  The time in Julian Centuries
+ * @return      The mean obliquity, in radians
  */
 static double
 corrected_mean_ecliptic_obliquity(double tm)
@@ -210,10 +204,10 @@ corrected_mean_ecliptic_obliquity(double tm)
 }
 
 /**
- * Calculates the Sun's declination.
+ * Calculates the Sun's declination
  * 
- * @param   tm  The time in Julian Centuries.
- * @return      The Sun's declination, in radian.
+ * @param   tm  The time in Julian Centuries
+ * @return      The Sun's declination, in radian
  */
 static inline double
 solar_declination(double tm)
@@ -224,10 +218,10 @@ solar_declination(double tm)
 
 /**
  * Calculates the equation of time, the discrepancy
- * between apparent and mean solar time.
+ * between apparent and mean solar time
  * 
- * @param   tm  The time in Julian Centuries.
- * @return      The equation of time, in degrees.
+ * @param   tm  The time in Julian Centuries
+ * @return      The equation of time, in degrees
  */
 static inline double
 equation_of_time(double tm)
@@ -245,15 +239,15 @@ equation_of_time(double tm)
 
 /**
  * Calculates the Sun's elevation as apparent
- * from a geographical position.
+ * from a geographical position
  * 
- * @param   tm         The time in Julian Centuries.
+ * @param   tm         The time in Julian Centuries
  * @param   latitude   The latitude in degrees northwards from 
- *                     the equator, negative for southwards.
+ *                     the equator, negative for southwards
  * @param   longitude  The longitude in degrees eastwards from
- *                     Greenwich, negative for westwards.
+ *                     Greenwich, negative for westwards
  * @return             The Sun's apparent elevation at the specified time as seen
- *                     from the specified position, measured in radians.
+ *                     from the specified position, measured in radians
  */
 static inline double
 solar_elevation_from_time(double tm, double latitude, double longitude)
@@ -265,35 +259,37 @@ solar_elevation_from_time(double tm, double latitude, double longitude)
 	return elevation_from_hour_angle(latitude, solar_declination(tm), rc);
 }
 
-
 /**
  * Calculates the Sun's elevation as apparent
- * from a geographical position.
+ * from a geographical position
  * 
  * @param   latitude   The latitude in degrees northwards from 
- *                     the equator, negative for southwards.
+ *                     the equator, negative for southwards
  * @param   longitude  The longitude in degrees eastwards from
- *                     Greenwich, negative for westwards.
- * @return             The Sun's apparent elevation as seen, right now,
- *                     from the specified position, measured in degrees.
- * 
- * @throws  0  On success.
- * @throws     Any error specified for clock_gettime(3) on error.
+ *                     Greenwich, negative for westwards
+ * @param   elevation  Output parameter for the Sun's apparent elevation
+ *                     as seen, right now, from the specified position,
+ *                     measured in degrees
+ * @return             0 on success, -1 on failure
+ * @throws             Any error specified for clock_gettime(3) on error
  */
 double
-libred_solar_elevation(double latitude, double longitude)
+libred_solar_elevation(double latitude, double longitude, double *elevation)
 {
-	double tm = julian_centuries();
-	return errno ? -1 : degrees(solar_elevation_from_time(tm, latitude, longitude));
+	double tm;
+	if (julian_centuries(&tm))
+		return -1;
+	*elevation = degrees(solar_elevation_from_time(tm, latitude, longitude));
+	return 0;
 }
 
-
 /**
- * Exit if time the is before year 0 in J2000.
+ * Exit if time the is before year 0 in J2000
  * 
- * @return  0 on success, -1 on error.
+ * @return  0 on success, -1 on error
  */
-int libred_check_timetravel(void)
+int
+libred_check_timetravel(void)
 {
 #if !defined(TIMETRAVELLER)
 	struct timespec now;

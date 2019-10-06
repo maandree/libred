@@ -122,31 +122,9 @@ This header defines the following functions:
 .BR libred_check_timetravel (3)
 .TP
 *
-.BR libred_init_colour (3)
-.TP
-*
-.BR libred_term_colour (3)
-.TP
-*
 .BR libred_get_colour (3)
-.PP
-This header may define
-.B extern int libred_fd
-iff it does it also defines the macro
-.BR LIBRED_HAVE_FD .
-If it does, you want to keep this file descriptor open when you daemonise
-your process. It is set by
-.BR libred_init_colour (3)
-and unset by
-.BR libred_term_colour (3).
-It value is negative (more precisely it is -1) if no file descriptor has
-been opened.
-.SH "FUTURE DIRECTIONS"
-None.
-.SH "SEE ALSO"
+.SH SEE ALSO
 .BR libred (7),
 .BR libred_solar_elevation (3),
 .BR libred_check_timetravel (3),
-.BR libred_init_colour (3),
-.BR libred_term_colour (3),
 .BR libred_get_colour (3)
