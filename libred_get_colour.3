@@ -33,6 +33,22 @@ and
 all will be 1.0 if
 .I temp
 is 6500.
+.PP
+libred has a table of colour temperature values, the
+.BR libred_get_colour ()
+function interpolates values that are missing. If you
+don't want any interpolation the
+.I temp
+parameter can be specified in one of the following ways:
+.TP
+floor
+.I (temp - LIBRED_LOWEST_TEMPERATURE) / LIBRED_DELTA_TEMPERATURE * LIBRED_DELTA_TEMPERATURE + LIBRED_LOWEST_TEMPERATURE
+.TP
+ceiling
+.I (temp - LIBRED_LOWEST_TEMPERATURE + LIBRED_DELTA_TEMPERATURE - 1) / LIBRED_DELTA_TEMPERATURE * LIBRED_DELTA_TEMPERATURE + LIBRED_LOWEST_TEMPERATURE
+.TP
+round to nearest
+.I (temp - LIBRED_LOWEST_TEMPERATURE + LIBRED_DELTA_TEMPERATURE / 2) / LIBRED_DELTA_TEMPERATURE * LIBRED_DELTA_TEMPERATURE + LIBRED_LOWEST_TEMPERATURE
 .SH RETURN VALUE
 Upon successful completion, the
 .BR libred_get_colour ()

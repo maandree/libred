@@ -9,9 +9,10 @@
 # pragma GCC diagnostic ignored "-Wfloat-equal"
 #endif
 
-struct xy {double x, y;};
-
-static struct xy xy_table[] = {
+/**
+ * Colour temperatures in CIE xy (xyY without Y)
+ */
+static struct xy {double x, y;} xy_table[] = {
 #include "10deg-xy.i"
 };
 

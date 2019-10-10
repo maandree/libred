@@ -176,13 +176,38 @@ int libred_check_timetravel(void);
 /**
  * Get the [0, 1] sRGB values of a colour temperature
  * 
+ * libred has a table of colour temperature values, this
+ * function interpolates values that are missing. If you
+ * don't want any interpolation the `temp` parameter can
+ * be specified in one of the following ways:
+ * 
+ * - floor:
+ *         (temp - LIBRED_LOWEST_TEMPERATURE) /
+ *         LIBRED_DELTA_TEMPERATURE *
+ *         LIBRED_DELTA_TEMPERATURE +
+ *         LIBRED_LOWEST_TEMPERATURE
+ * 
+ * - ceiling:
+ *         (temp - LIBRED_LOWEST_TEMPERATURE +
+ *          LIBRED_DELTA_TEMPERATURE - 1) /
+ *         LIBRED_DELTA_TEMPERATURE *
+ *         LIBRED_DELTA_TEMPERATURE +
+ *         LIBRED_LOWEST_TEMPERATURE
+ * 
+ * - round to nearest:
+ *         (temp - LIBRED_LOWEST_TEMPERATURE +
+ *          LIBRED_DELTA_TEMPERATURE / 2) /
+ *         LIBRED_DELTA_TEMPERATURE *
+ *         LIBRED_DELTA_TEMPERATURE +
+ *         LIBRED_LOWEST_TEMPERATURE
+ * 
  * @param   temp  The desired colour temperature
  * @param   r     Output parameter for the “red” value
  * @param   g     Output parameter for the green value
  * @param   b     Output parameter for the blue value
  * @return        0 on succeess, -1 on error
  * 
- * @throws  EDOM  The selected temperature is below 1000 K
+ * @throws  EDOM  The selected temperature is below 1000K
  */
 int libred_get_colour(long int, double *, double *, double *);
 
