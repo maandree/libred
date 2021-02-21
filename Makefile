@@ -23,7 +23,7 @@ generate-table: generate-table.c blackbody.c 10deg-xy.i libred.h
 	$(CC) -c -o $@ $< $(CPPFLAGS) $(CFLAGS)
 
 .c.lo:
-	$(CC) -fPIC -c -o $@ $<  $(CPPFLAGS) $(CFLAGS)
+	$(CC) -fPIC -c -o $@ $< $(CPPFLAGS) $(CFLAGS)
 
 libred.a: solar.o blackbody.o
 	$(AR) rc $@ $?
