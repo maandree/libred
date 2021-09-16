@@ -19,6 +19,7 @@
 # define CLOCK_REALTIME_COARSE  CLOCK_REALTIME
 #endif
 
+
 /**
  * Get current Julian Centuries time (100 Julian days since J2000)
  * 
@@ -26,7 +27,7 @@
  * @return        0 on success, -1 on failure
  * @throws        Any error specified for clock_gettime(3) on error
  */
-static double
+static int
 julian_centuries(double *nowp)
 {
 	struct timespec now;

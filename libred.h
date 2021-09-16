@@ -214,4 +214,3 @@ int libred_get_colour(long int, double *, double *, double *);
 
 
 #endif
-

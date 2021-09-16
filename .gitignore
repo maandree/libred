@@ -5,5 +5,7 @@
 *.i
 *.su
 *.so
+*.dll
+*.dylib
 *.lo
 /generate-table

@@ -1,28 +1,28 @@
 /* See LICENSE file for copyright and license details. */
-#if __GNUC__
+#if defined(__GNUC__)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wunsuffixed-float-constants"
 #endif
 
 #ifndef LIBRED_COMPILING_PARSER
-#include "libred.h"
-#include <errno.h>
-#include <math.h>
-#include <stddef.h>
+# include "libred.h"
+# include <errno.h>
+# include <math.h>
+# include <stddef.h>
 
 
 /**
  * Colour temperatures in CIE xy (xyY without Y)
  */
 static struct xy {double x, y;} xy_table[] = {
-#include "10deg-xy.i"
+# include "10deg-xy.i"
 };
 
 /**
  * Colour temperatures in sRGB
  */
 static struct rgb {double r, g, b;} rgb_table[] = {
-#include "10deg-rgb.i"
+# include "10deg-rgb.i"
 };
 
 
@@ -145,6 +145,7 @@ libred_get_colour(long int temp, double *r, double *g, double *b)
 {
 	double x1, y1, x2, y2;
 	size_t i;
+	long int tmp;
 
 	if (temp > LIBRED_HIGHEST_TEMPERATURE)
 		temp = LIBRED_HIGHEST_TEMPERATURE;
@@ -154,15 +155,16 @@ libred_get_colour(long int temp, double *r, double *g, double *b)
 		return -1;
 	}
 
-	if (temp % LIBRED_DELTA_TEMPERATURE) {
-		i = (temp - LIBRED_LOWEST_TEMPERATURE) / LIBRED_DELTA_TEMPERATURE;
+	tmp = temp - LIBRED_LOWEST_TEMPERATURE;
+	
+	i = (size_t)(tmp / LIBRED_DELTA_TEMPERATURE);
+	if (tmp % LIBRED_DELTA_TEMPERATURE) {
 		x1 = xy_table[i].x;
 		y1 = xy_table[i].y;
 		x2 = xy_table[i + 1].x;
 		y2 = xy_table[i + 1].y;
 		interpolate(x1, y1, x2, y2, (double)temp, r, g, b);
 	} else {
-		i = (temp - LIBRED_LOWEST_TEMPERATURE) / LIBRED_DELTA_TEMPERATURE;
 		*r = rgb_table[i].r;
 		*g = rgb_table[i].g;
 		*b = rgb_table[i].b;

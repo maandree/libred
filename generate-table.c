@@ -5,9 +5,11 @@
 #include <string.h>
 #include <stdio.h>
 
-#if __GNUC__
+#if defined(__GNUC__)
 # pragma GCC diagnostic ignored "-Wfloat-equal"
+# pragma GCC diagnostic ignored "-Wunsuffixed-float-constants"
 #endif
+
 
 /**
  * Colour temperatures in CIE xy (xyY without Y)
@@ -19,6 +21,7 @@ static struct xy {double x, y;} xy_table[] = {
 /* define ciexyy_to_srgb() and adjust_luma() */
 #define LIBRED_COMPILING_PARSER
 #include "blackbody.c"
+
 
 int
 main(void)
