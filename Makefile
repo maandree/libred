@@ -1,10 +1,5 @@
 .POSIX:
 
-LIB_MAJOR = 1
-LIB_MINOR = 0
-LIB_VERSION = $(LIB_MAJOR).$(LIB_MINOR)
-
-
 CONFIGFILE = config.mk
 include $(CONFIGFILE)
 
@@ -15,11 +10,20 @@ OS = linux
 include mk/$(OS).mk
 
 
+LIB_MAJOR = 1
+LIB_MINOR = 0
+LIB_VERSION = $(LIB_MAJOR).$(LIB_MINOR)
+
+
 OBJ =\
 	solar.o\
 	blackbody.o
 
 LOBJ = $(OBJ:.o=.lo)
+
+MAN0 = libred.h.0
+MAN3 = libred_check_timetravel.3 libred_get_colour.3 libred_solar_elevation.3
+MAN7 = libred.7
 
 
 all: libred.a libred.$(LIBEXT)
@@ -33,8 +37,8 @@ generate-table.o: blackbody.c 10deg-xy.i libred.h
 10deg-rgb.i: generate-table 10deg
 	./generate-table > $@
 
-.o:
-	$(CC) -o $@ $< $(LDFLAGS)
+generate-table: generate-table.o
+	$(CC) -o $@ generate-table.o $(LDFLAGS)
 
 .c.o:
 	$(CC) -c -o $@ $< $(CFLAGS) $(CPPFLAGS)
@@ -43,7 +47,7 @@ generate-table.o: blackbody.c 10deg-xy.i libred.h
 	$(CC) -fPIC -c -o $@ $< $(CFLAGS) $(CPPFLAGS)
 
 libred.a: $(OBJ)
-	-@rm -f -- $@
+	-rm -f -- $@
 	$(AR) rc $@ $(OBJ)
 	$(AR) s $@
 
@@ -58,12 +62,13 @@ install: libred.a libred.$(LIBEXT)
 	mkdir -p -- "$(DESTDIR)$(MANPREFIX)/man7"
 	cp -- libred.a "$(DESTDIR)$(PREFIX)/lib"
 	cp -- libred.$(LIBEXT) "$(DESTDIR)$(PREFIX)/lib/libred.$(LIBMINOREXT)"
+	$(FIX_INSTALL_NAME) "$(DESTDIR)$(PREFIX)/lib/libred.$(LIBMINOREXT)"
 	ln -sf -- libred.$(LIBMINOREXT) "$(DESTDIR)$(PREFIX)/lib/libred.$(LIBMAJOREXT)"
 	ln -sf -- libred.$(LIBMAJOREXT) "$(DESTDIR)$(PREFIX)/lib/libred.$(LIBEXT)"
 	cp -- libred.h "$(DESTDIR)$(PREFIX)/include"
-	cp -- libred.h.0 "$(DESTDIR)$(MANPREFIX)/man0"
-	cp -- libred_check_timetravel.3 libred_get_colour.3 libred_solar_elevation.3 "$(DESTDIR)$(MANPREFIX)/man3"
-	cp -- libred.7 "$(DESTDIR)$(MANPREFIX)/man7"
+	cp -- $(MAN0) "$(DESTDIR)$(MANPREFIX)/man0"
+	cp -- $(MAN3) "$(DESTDIR)$(MANPREFIX)/man3"
+	cp -- $(MAN7) "$(DESTDIR)$(MANPREFIX)/man7"
 
 uninstall:
 	-rm -f -- "$(DESTDIR)$(PREFIX)/lib/libred.a"
@@ -71,11 +76,9 @@ uninstall:
 	-rm -f -- "$(DESTDIR)$(PREFIX)/lib/libred.$(LIBMINOREXT)"
 	-rm -f -- "$(DESTDIR)$(PREFIX)/lib/libred.$(LIBEXT)"
 	-rm -f -- "$(DESTDIR)$(PREFIX)/include/libred.h"
-	-rm -f -- "$(DESTDIR)$(MANPREFIX)/man0/libred.h.0"
-	-rm -f -- "$(DESTDIR)$(MANPREFIX)/man3/libred_check_timetravel.3"
-	-rm -f -- "$(DESTDIR)$(MANPREFIX)/man3/libred_get_colour.3"
-	-rm -f -- "$(DESTDIR)$(MANPREFIX)/man3/libred_solar_elevation.3"
-	-rm -f -- "$(DESTDIR)$(MANPREFIX)/man7/libred.7"
+	-cd -- "$(DESTDIR)$(MANPREFIX)/man0/" && rm -f -- $(MAN0)
+	-cd -- "$(DESTDIR)$(MANPREFIX)/man3/" && rm -f -- $(MAN3)
+	-cd -- "$(DESTDIR)$(MANPREFIX)/man7/" && rm -f -- $(MAN7)
 
 clean:
 	-rm -f -- generate-table *.i *.o *.a *.lo *.su *.so *.dll *.dylib
