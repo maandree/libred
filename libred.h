@@ -13,12 +13,12 @@
 /**
  * The Sun's elevation at sunset and sunrise, measured in degrees
  */
-#define LIBRED_SOLAR_ELEVATION_SUNSET_SUNRISE   (-32.0 / 60.0)
+#define LIBRED_SOLAR_ELEVATION_SUNSET_SUNRISE  (-32.0 / 60.0)
 
 /**
  * The Sun's elevation at civil dusk and civil dawn, measured in degrees
  */
-#define LIBRED_SOLAR_ELEVATION_CIVIL_DUSK_DAWN   (-6.0)
+#define LIBRED_SOLAR_ELEVATION_CIVIL_DUSK_DAWN  (-6.0)
 
 /**
  * The Sun's elevation at nautical dusk and nautical dawn, measured in degrees
