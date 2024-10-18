@@ -3,6 +3,7 @@
 #include <math.h>
 #include <time.h>
 #include <errno.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -21,33 +22,25 @@
 
 
 /**
- * Get current Julian Centuries time (100 Julian days since J2000)
+ * Get current Julian Centuries time (100 Julian Days since J2000)
+ * and Julian Day time
  * 
- * @param   nowp  Output parameter for the current Julian Centuries time
- * @return        0 on success, -1 on failure
- * @throws        Any error specified for clock_gettime(3) on error
+ * @param   tc_out  Output parameter for the current Julian Centuries time
+ * @param   td_out  Output parameter for the current Julian Day time
+ * @return          0 on success, -1 on failure
+ * @throws          Any error specified for clock_gettime(3) on error
  */
 static int
-julian_centuries(double *nowp)
+julian_time(double *tc_out, double *td_out)
 {
 	struct timespec now;
+	double tu;
 	if (clock_gettime(CLOCK_REALTIME_COARSE, &now))
 		return -1;
-	*nowp = (double)(now.tv_nsec) / 1000000000.0 + (double)(now.tv_sec);
-	*nowp = (*nowp / 86400.0 + 2440587.5 - 2451545.0) / 36525.0;
+	tu = fma((double)now.tv_nsec, 0.000000001, (double)now.tv_sec);
+	*td_out = tu / 86400.0 + 2440587.5;
+	*tc_out = (*td_out - 2451545.0) / 36525.0;
 	return 0;
-}
-
-/**
- * Convert a Julian Centuries timestamp to a Julian Day timestamp
- * 
- * @param   t  The time in Julian Centuries
- * @return      The time in Julian Days
- */
-static double
-julian_centuries_to_julian_day(double t)
-{
-	return 36525.0 * t + 2451545.0;
 }
 
 
@@ -60,7 +53,7 @@ julian_centuries_to_julian_day(double t)
 static double
 radians(double deg)
 {
-	return deg * (double)M_PI / 180.0;
+	return (double)M_PI / 180.0 * deg;
 }
 
 /**
@@ -72,7 +65,35 @@ radians(double deg)
 static double
 degrees(double rad)
 {
-	return rad * 180.0 / (double)M_PI;
+	return 180.0 / (double)M_PI * rad;
+}
+
+/**
+ * Convert an angle (or otherwise) from degrees to radians
+ * and, using fused multply–add, add some number of degrees
+ * 
+ * @param  deg  The angle in degrees
+ * @param  aug  The number of radians to add
+ * @param       The angle in radians, plus `aug`
+ */
+static double
+radians_plus(double deg, double aug)
+{
+	return fma((double)M_PI / 180.0, deg, aug);
+}
+
+/**
+ * Convert an angle (or otherwise) from radians to degrees
+ * and, using fused multply–add, add some number of degrees
+ * 
+ * @param  rad  The angle in radians
+ * @param  aug  The number of degrees to add
+ * @param       The angle in degrees, plus `aug`
+ */
+static double
+degrees_plus(double rad, double aug)
+{
+	return fma(180.0 / (double)M_PI, rad, aug);
 }
 
 
@@ -88,10 +109,11 @@ degrees(double rad)
 static double
 elevation_from_hour_angle(double latitude, double declination, double hour_angle)
 {
-	double r = cos(radians(latitude));
-	r *= cos(hour_angle) * cos(declination);
-	r += sin(radians(latitude)) * sin(declination);
-	return asin(r);
+	double c, s;
+	latitude = radians(latitude);
+	c = cos(latitude) * cos(declination);
+	s = sin(latitude) * sin(declination);
+	return asin(fma(c, cos(hour_angle), s));
 }
 
 /**
@@ -103,11 +125,7 @@ elevation_from_hour_angle(double latitude, double declination, double hour_angle
 static double
 sun_geometric_mean_longitude(double t)
 {
-	double r = fmod(pow(0.0003032 * t, 2.0) + 36000.76983 * t + 280.46646, 360.0);
-#if defined(TIMETRAVELLER)
-	r = r < 0.0 ? (r + 360.0) : r;
-#endif
-	return radians(r);
+	return radians(fmod(fma(fma(0.0003032, t, 36000.76983), t, 280.46646), 360.0));
 }
 
 /**
@@ -119,7 +137,7 @@ sun_geometric_mean_longitude(double t)
 static double
 sun_geometric_mean_anomaly(double t)
 {
-	return radians(pow(-0.0001537 * t, 2.0) + 35999.05029 * t + 357.52911);
+	return radians(fmod(fma(fma(-0.0001537, t, 35999.05029), t, 357.52911), 360.0));
 }
 
 /**
@@ -131,7 +149,7 @@ sun_geometric_mean_anomaly(double t)
 static double
 earth_orbit_eccentricity(double t)
 {
-	return pow(-0.0000001267 * t, 2.0) - 0.000042037 * t + 0.016708634;
+	return fma(fma(-0.0000001267, t, -0.000042037), t, 0.016708634);
 }
 
 /**
@@ -145,9 +163,9 @@ static double
 sun_equation_of_centre(double t)
 {
 	double a = sun_geometric_mean_anomaly(t), r;
-	r  = sin(1.0 * a) * (pow(-0.000014 * t, 2.0) - 0.004817 * t + 1.914602);
-	r += sin(2.0 * a) * (-0.000101 * t + 0.019993);
-	r += sin(3.0 * a) * 0.000289;
+	r = sin(1.0 * a) * fma(fma(-0.000014, t, 0.004817), t, 1.914602);
+	r = fma(sin(2.0 * a), fma(-0.000101, t, 0.019993), r);
+	r = fma(sin(3.0 * a), 0.000289, r);
 	return radians(r);
 }
 
@@ -172,8 +190,9 @@ sun_real_longitude(double t)
 static double
 sun_apparent_longitude(double t)
 {
-	double r = degrees(sun_real_longitude(t)) - 0.00569;
-	return radians(r - 0.00478 * sin(radians(-1934.136 * t + 125.04)));
+	double r = degrees_plus(sun_real_longitude(t), -0.00569);
+	double a = radians(fma(-1934.136, t, 125.04));
+	return radians(fma(-0.00478, sin(a), r));
 }
 
 /**
@@ -186,7 +205,7 @@ sun_apparent_longitude(double t)
 static double
 mean_ecliptic_obliquity(double t)
 {
-	double r = pow(0.001813 * t, 3.0) - pow(0.00059 * t, 2.0) - 46.815 * t + 21.448;
+	double r = fma(fma(fma(0.001813, t, -0.00059), t, -46.815), t, 21.448);
 	return radians(23.0 + (26.0 + r / 60.0) / 60.0);
 }
 
@@ -200,8 +219,8 @@ mean_ecliptic_obliquity(double t)
 static double
 corrected_mean_ecliptic_obliquity(double t)
 {
-	double r = 0.00256 * cos(radians(-1934.136 * t + 125.04));
-	return radians(r + degrees(mean_ecliptic_obliquity(t)));
+	double r = cos(radians(fma(-1934.136, t, 125.04)));
+	return radians_plus(0.00256 * r, mean_ecliptic_obliquity(t));
 }
 
 /**
@@ -231,10 +250,12 @@ equation_of_time(double t)
 	double e = earth_orbit_eccentricity(t);
 	double m = sun_geometric_mean_anomaly(t);
 	double y = pow(tan(corrected_mean_ecliptic_obliquity(t) / 2.0), 2.0);
-	double r = y * sin(2.0 * l);
-	r += (4.0 * y * cos(2.0 * l) - 2.0) * e * sin(m);
-	r -= pow(0.5 * y, 2.0) * sin(4.0 * l);
-	r -= pow(1.25 * e, 2.0) * sin(2.0 * m);
+	double r, c, s;
+	s = y * sin(2.0 * l);
+	c = y * cos(2.0 * l);
+	r = fma(fma(4.0, c, -2.0), e * sin(m), s);
+	r = fma(pow(0.50 * y, 2.0), sin(-4.0 * l), r);
+	r = fma(pow(1.25 * e, 2.0), sin(-2.0 * m), r);
 	return 4.0 * degrees(r);
 }
 
@@ -242,7 +263,8 @@ equation_of_time(double t)
  * Calculates the Sun's elevation as apparent
  * from a geographical position
  * 
- * @param   t          The time in Julian Centuries
+ * @param   tc         The time in Julian Centuries
+ * @param   td         The time in Julian Days
  * @param   latitude   The latitude in degrees northwards from 
  *                     the equator, negative for southwards
  * @param   longitude  The longitude in degrees eastwards from
@@ -251,13 +273,13 @@ equation_of_time(double t)
  *                     from the specified position, measured in radians
  */
 static double
-solar_elevation_from_time(double t, double latitude, double longitude)
+solar_elevation_from_time(double tc, double td, double latitude, double longitude)
 {
-	double a = julian_centuries_to_julian_day(t);
-	a = (a - round(a) - 0.5) * 1440;
-	a = 720.0 - a - equation_of_time(t);
-	a = radians(a / 4.0 - longitude);
-	return elevation_from_hour_angle(latitude, solar_declination(t), a);
+	double r;
+	td = td - round(td);
+	r = fma(1440, td - 1, -equation_of_time(tc));
+	r = radians(fma(0.25, r, -longitude));
+	return elevation_from_hour_angle(latitude, solar_declination(tc), r);
 }
 
 /**
@@ -277,33 +299,18 @@ solar_elevation_from_time(double t, double latitude, double longitude)
 double
 libred_solar_elevation(double latitude, double longitude, double *elevation)
 {
-	double t;
-	if (julian_centuries(&t))
+	double tc, td;
+	if (julian_time(&tc, &td))
 		return -1;
-	*elevation = degrees(solar_elevation_from_time(t, latitude, longitude));
+	*elevation = degrees(solar_elevation_from_time(tc, td, latitude, longitude));
 	return 0;
 }
 
 /**
- * Exit if time the is before year 0 in J2000
- * 
- * @return  0 on success, -1 on error
+ * This function is obsolete
  */
 int
 libred_check_timetravel(void)
 {
-#if !defined(TIMETRAVELLER)
-	struct timespec now;
-	if (clock_gettime(CLOCK_REALTIME, &now))
-		return -1;
-	if (now.tv_sec < (time_t)946728000L) {
-		fprintf(stderr,
-		       "We have detected that you are a time-traveller"
-		       "(or your clock is not configured correctly.)"
-		       "Please recompile libred with -DTIMETRAVELLER"
-		       "(or correct your clock.)");
-		exit(1);
-	}
-#endif
 	return 0;
 }

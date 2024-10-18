@@ -147,10 +147,11 @@ double libred_solar_elevation(double, double, double *);
 
 
 /**
- * Exit if time the is before year 0 in J2000
- * 
- * @return  0 on success, -1 on error
+ * This function is obsolete
  */
+#if defined(__GNUC__)
+__attribute__((__deprecated__("libred_check_timetravel is not needed"), __const__))
+#endif
 int libred_check_timetravel(void);
 
 

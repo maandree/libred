@@ -119,12 +119,8 @@ This header defines the following functions:
 .BR libred_solar_elevation (3)
 .TP
 *
-.BR libred_check_timetravel (3)
-.TP
-*
 .BR libred_get_colour (3)
 .SH SEE ALSO
 .BR libred (7),
 .BR libred_solar_elevation (3),
-.BR libred_check_timetravel (3),
 .BR libred_get_colour (3)

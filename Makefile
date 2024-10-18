@@ -22,7 +22,7 @@ OBJ =\
 LOBJ = $(OBJ:.o=.lo)
 
 MAN0 = libred.h.0
-MAN3 = libred_check_timetravel.3 libred_get_colour.3 libred_solar_elevation.3
+MAN3 = libred_get_colour.3 libred_solar_elevation.3
 MAN7 = libred.7
 
 
