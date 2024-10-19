@@ -163,7 +163,7 @@ static double
 sun_equation_of_centre(double t)
 {
 	double a = sun_geometric_mean_anomaly(t), r;
-	r = sin(1.0 * a) * fma(fma(-0.000014, t, 0.004817), t, 1.914602);
+	r = sin(1.0 * a) * fma(fma(-0.000014, t, -0.004817), t, 1.914602);
 	r = fma(sin(2.0 * a), fma(-0.000101, t, 0.019993), r);
 	r = fma(sin(3.0 * a), 0.000289, r);
 	return radians(r);
@@ -241,7 +241,7 @@ solar_declination(double t)
  * between apparent and mean solar time
  * 
  * @param   t  The time in Julian Centuries
- * @return     The equation of time, in degrees
+ * @return     The equation of time, in minutes of time
  */
 static double
 equation_of_time(double t)
@@ -249,13 +249,14 @@ equation_of_time(double t)
 	double l = sun_geometric_mean_longitude(t);
 	double e = earth_orbit_eccentricity(t);
 	double m = sun_geometric_mean_anomaly(t);
-	double y = pow(tan(corrected_mean_ecliptic_obliquity(t) / 2.0), 2.0);
+	double y = tan(corrected_mean_ecliptic_obliquity(t) / 2.0;
 	double r, c, s;
+	y *= y;
 	s = y * sin(2.0 * l);
 	c = y * cos(2.0 * l);
 	r = fma(fma(4.0, c, -2.0), e * sin(m), s);
-	r = fma(pow(0.50 * y, 2.0), sin(-4.0 * l), r);
-	r = fma(pow(1.25 * e, 2.0), sin(-2.0 * m), r);
+	r = fma(-0.5 * y*y, sin(4.0 * l), r);
+	r = fma(-1.25 * e*e, sin(2.0 * m), r);
 	return 4.0 * degrees(r);
 }
 
