@@ -249,7 +249,7 @@ equation_of_time(double t)
 	double l = sun_geometric_mean_longitude(t);
 	double e = earth_orbit_eccentricity(t);
 	double m = sun_geometric_mean_anomaly(t);
-	double y = tan(corrected_mean_ecliptic_obliquity(t) / 2.0;
+	double y = tan(corrected_mean_ecliptic_obliquity(t) / 2.0);
 	double r, c, s;
 	y *= y;
 	s = y * sin(2.0 * l);
