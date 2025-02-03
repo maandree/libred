@@ -212,6 +212,82 @@ int libred_check_timetravel(void);
  */
 int libred_get_colour(long int, double *, double *, double *);
 
+/**
+ * Get the CIE xy values of a colour temperature
+ * 
+ * libred has a table of colour temperature values, this
+ * function interpolates values that are missing. If you
+ * don't want any interpolation the `temp` parameter can
+ * be specified in one of the following ways:
+ * 
+ * - floor:
+ *         (temp - LIBRED_LOWEST_TEMPERATURE) /
+ *         LIBRED_DELTA_TEMPERATURE *
+ *         LIBRED_DELTA_TEMPERATURE +
+ *         LIBRED_LOWEST_TEMPERATURE
+ * 
+ * - ceiling:
+ *         (temp - LIBRED_LOWEST_TEMPERATURE +
+ *          LIBRED_DELTA_TEMPERATURE - 1) /
+ *         LIBRED_DELTA_TEMPERATURE *
+ *         LIBRED_DELTA_TEMPERATURE +
+ *         LIBRED_LOWEST_TEMPERATURE
+ * 
+ * - round to nearest:
+ *         (temp - LIBRED_LOWEST_TEMPERATURE +
+ *          LIBRED_DELTA_TEMPERATURE / 2) /
+ *         LIBRED_DELTA_TEMPERATURE *
+ *         LIBRED_DELTA_TEMPERATURE +
+ *         LIBRED_LOWEST_TEMPERATURE
+ * 
+ * @param   temp  The desired colour temperature
+ * @param   x     Output parameter for the x value
+ * @param   y     Output parameter for the y value
+ * @return        0 on succeess, -1 on error
+ * 
+ * @throws  EDOM  The selected temperature is below 1000K
+ */
+int libred_get_colour_xy(long int, double *, double *);
+
+/**
+ * Calculate the colour temperature from its CIE xy values
+ * 
+ * @param   x        The CIE x value for the colour temperature
+ * @param   y        The CIE y value for the colour temperature
+ * @param   x_error  Output parameter for the absolute error in
+ *                   the CIE x value of the returned colour
+ *                   temperature; may be `NULL`
+ * @param   y_error  Output parameter for the absolute error in
+ *                   the CIE y value of the returned colour
+ *                   temperature; may be `NULL`
+ * @return           The closest matching colour temperature
+ */
+double libred_get_temperature_xy(double, double, double *, double *);
+
+/**
+ * Calculate the colour temperature from its [0, 1] sRGB values
+ * 
+ * @param   r        The sRGB “red” value for the colour temperature
+ * @param   g        The sRGB green value for the colour temperature
+ * @param   b        The sRGB blue value for the colour temperature
+ * @param   y        Output parameter for the CIE Y value for the
+ *                   provided sRGB colour, the sRGB error values must
+ *                   be multiplied by this value to correct them to
+ *                   match the brightness of the input sRGB colour;
+ *                   may be `NULL`
+ * @param   r_error  Output parameter for the absolute error in the
+ *                   “red” value of the returned colour temperature;
+ *                   may be `NULL`
+ * @param   g_error  Output parameter for the absolute error in the
+ *                   green value of the returned colour temperature;
+ *                   may be `NULL`
+ * @param   b_error  Output parameter for the absolute error in the
+ *                   blue value of the returned colour temperature;
+ *                   may be `NULL`
+ * @return           The closest matching colour temperature
+ */
+double libred_get_temperature(double, double, double, double *, double *, double *, double *);
+
 
 
 #endif

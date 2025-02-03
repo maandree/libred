@@ -11,7 +11,7 @@ include mk/$(OS).mk
 
 
 LIB_MAJOR = 1
-LIB_MINOR = 0
+LIB_MINOR = 1
 LIB_VERSION = $(LIB_MAJOR).$(LIB_MINOR)
 
 
@@ -22,8 +22,12 @@ OBJ =\
 LOBJ = $(OBJ:.o=.lo)
 
 MAN0 = libred.h.0
-MAN3 = libred_get_colour.3 libred_solar_elevation.3
 MAN7 = libred.7
+
+MAN3 =\
+	libred_get_colour.3\
+	libred_get_colour_xy.3\
+	libred_solar_elevation.3
 
 
 all: libred.a libred.$(LIBEXT)
@@ -66,9 +70,9 @@ install: libred.a libred.$(LIBEXT)
 	ln -sf -- libred.$(LIBMINOREXT) "$(DESTDIR)$(PREFIX)/lib/libred.$(LIBMAJOREXT)"
 	ln -sf -- libred.$(LIBMAJOREXT) "$(DESTDIR)$(PREFIX)/lib/libred.$(LIBEXT)"
 	cp -- libred.h "$(DESTDIR)$(PREFIX)/include"
-	cp -- $(MAN0) "$(DESTDIR)$(MANPREFIX)/man0"
-	cp -- $(MAN3) "$(DESTDIR)$(MANPREFIX)/man3"
-	cp -- $(MAN7) "$(DESTDIR)$(MANPREFIX)/man7"
+	cp -P -- $(MAN0) "$(DESTDIR)$(MANPREFIX)/man0"
+	cp -P -- $(MAN3) "$(DESTDIR)$(MANPREFIX)/man3"
+	cp -P -- $(MAN7) "$(DESTDIR)$(MANPREFIX)/man7"
 
 uninstall:
 	-rm -f -- "$(DESTDIR)$(PREFIX)/lib/libred.a"

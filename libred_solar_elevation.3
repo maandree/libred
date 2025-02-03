@@ -27,11 +27,13 @@ Other values may or may not work, no error is thrown if used.
 .SH RETURN VALUE
 Upon successful completion, the 
 .BR libred_solar_elevation ()
-return 0, on failure it returns -1 and sets
+function returns 0, on failure it returns -1 and sets
 .I errno
 to indicate the error.
 .SH ERRORS
-The function may fail for any reason specified for
+The
+.BR libred_solar_elevation ()
+function may fail for any reason specified for
 .BR clock_gettime (3).
 .SH SEE ALSO
 .BR libred.h (0),

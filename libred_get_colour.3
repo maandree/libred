@@ -6,6 +6,7 @@ libred_get_colour \- Calculate a colour temperature
 #include <libred.h>
 
 int \fBlibred_get_colour\fP(long int \fItemp\fP, double *\fIr\fP, double *\fIg\fP, double *\fIb\fP);
+int \fBlibred_get_colour_xy\fP(long int \fItemp\fP, double *\fIx\fP, double *\fIy\fP);
 .fi
 .PP
 Link with
@@ -14,7 +15,8 @@ Link with
 .BR libred_get_colour ()
 gets or interpolates the colour temperature for
 .I temp
-kelvins, and returns the colour temperature in sRGB. The values,
+kelvins, and returns the colour temperature in sRGB, with the
+sRGB transfer function applied. The values,
 between 0.0 and 1.0, for the \(dqred\(dq, green, and blue channels
 are stored in
 .IR *r ,
@@ -49,14 +51,45 @@ ceiling
 .TP
 round to nearest
 .I (temp - LIBRED_LOWEST_TEMPERATURE + LIBRED_DELTA_TEMPERATURE / 2) / LIBRED_DELTA_TEMPERATURE * LIBRED_DELTA_TEMPERATURE + LIBRED_LOWEST_TEMPERATURE
+.PP
+The
+.BR libred_get_colour_xy ()
+function is the same as the
+.BR libred_get_colour ()
+except it uses the CIE xy colour space instead of sRGB
+(of course without any transfer function). This means
+that the chroma values x and y are stored in
+.I *x
+and
+.IR *y ,
+and the CIE Y value shall be assumed to be 1 for
+equivalence with the
+.BR libred_get_colour ()
+function.
+.PP
+Neither
+.IR r ,
+.IR g ,
+.IR b ,
+.IR x ,
+nor
+.I y
+may be
+.IR NULL .
 .SH RETURN VALUE
 Upon successful completion, the
 .BR libred_get_colour ()
+and
+.BR libred_get_colour_xy ()
 function returns 0. On failure, the function returns -1 and sets
 .I errno
 to indicate the error.
 .SH ERRORS
-The function may fail if:
+The
+.BR libred_get_colour ()
+and
+.BR libred_get_colour_xy ()
+functions may fail if:
 .TP
 .B EDOM
 If
