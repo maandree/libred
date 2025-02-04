@@ -1,0 +1,89 @@
+.TH LIBRED_GET_TEMPERATURE 3 LIBRED
+.SH NAME
+libred_get_temperature \- Calculate the temperature of a colour
+.SH SYNOPSIS
+.nf
+#include <libred.h>
+
+double \fBlibred_get_temperature\fP(double \fIr\fP, double \fIg\fP, double \fIb\fP, double *\fIY\fP,
+                              double *\fIr_error\fP, double *\fIg_error\fP, double *\fIb_error\fP);
+double \fBlibred_get_temperature_xy\fP(double \fIx\fP, double \fIy\fP, double *\fIx_error\fP, double *\fIy_error\fP);
+.fi
+.PP
+Link with
+.I -lred
+.IR -lm .
+.SH DESCRIPTION
+The
+.BR libred_get_temperature ()
+function parses
+.RI ( r ,
+.IR g ,
+.IR b )
+as a colour encoded in sRGB with values between 0 and 1
+and with the sRGB transfer function applied. From that
+it calculates the CIE Y (luminosity) of the colour and
+stores it in
+.I *Y
+and then normalises the the colour to have Y = 1 and
+calculates the closest matching colour temperature,
+which is returned.
+.PP
+The calculated temperature may not line perfectly with
+the colour so the difference between the colour of the
+returned temperature and the input colour (after
+normalisation to Y = 1) is returned in sRGB as
+.RI ( *r_error ", " *g_error ", " *b_error ),
+interpreted the same way as
+.IR r ,
+.IR g ,
+and
+.IR b .
+.PP
+The
+.BR libred_get_temperature_xy ()
+function is a variant of the
+.BR libred_get_temperature ()
+function that uses the CIE xy colour space
+(CIE xyY with Y = 1). Unlike sRGB, CIE xy
+does not have a transfer function, so the values
+are linear, and the values also do not have any
+limits and does have a natural interpretation.
+.PP
+Any of
+.IR Y ,
+.IR r_error ,
+.IR g_error ,
+.IR b_error ,
+.IR x_error ,
+and
+.IR y_error
+that is
+.I NULL
+is ignored.
+.SH RETURN VALUE
+The
+.BR libred_get_temperature ()
+and
+.BR libred_get_temperature_xy ()
+functions return the colour temperature in Kelvins.
+.SH ERRORS
+None.
+.SH NOTES
+The sRGB transfer function is applied to
+.IR *r_error ,
+.IR *g_error ,
+and
+.IR *b_error .
+One cannoy simply subtract them from
+.IR r ,
+.IR g ,
+and
+.IR b ,
+without first undoing the transfer function,
+to get the colour or the calculated temperature.
+.SH SEE ALSO
+.BR libred.h (0),
+.BR libred (7),
+.BR libred_get_temperature (3),
+.BR libred_solar_elevation (3)

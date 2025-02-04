@@ -18,7 +18,7 @@ static struct xy {double x, y;} xy_table[] = {
 #include "10deg-xy.i"
 };
 
-/* define ciexyy_to_srgb() and adjust_luma() */
+/* define ciexyy_to_srgb() */
 #define LIBRED_COMPILING_PARSER
 #include "blackbody.c"
 

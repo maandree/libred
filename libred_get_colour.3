@@ -1,6 +1,6 @@
 .TH LIBRED_GET_COLOUR 3 LIBRED
 .SH NAME
-libred_get_colour \- Calculate a colour temperature
+libred_get_colour \- Calculate the colour of a temperature
 .SH SYNOPSIS
 .nf
 #include <libred.h>
@@ -10,7 +10,8 @@ int \fBlibred_get_colour_xy\fP(long int \fItemp\fP, double *\fIx\fP, double *\fI
 .fi
 .PP
 Link with
-.IR -lred .
+.I -lred
+.IR -lm .
 .SH DESCRIPTION
 .BR libred_get_colour ()
 gets or interpolates the colour temperature for
@@ -100,4 +101,5 @@ is less than
 .SH SEE ALSO
 .BR libred.h (0),
 .BR libred (7),
-.BR libred_get_solar_elevation (3)
+.BR libred_get_temperature (3),
+.BR libred_solar_elevation (3)

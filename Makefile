@@ -27,6 +27,8 @@ MAN7 = libred.7
 MAN3 =\
 	libred_get_colour.3\
 	libred_get_colour_xy.3\
+	libred_get_temperature.3\
+	libred_get_temperature_xy.3\
 	libred_solar_elevation.3
 
 
@@ -36,7 +38,9 @@ blackbody.o: 10deg-xy.i 10deg-rgb.i libred.h
 generate-table.o: blackbody.c 10deg-xy.i libred.h
 
 10deg-xy.i: 10deg
-	sed -e 's/^/{/' -e 's/ /, /' -e 's/$$/},/' < 10deg | sed '$$s/,$$//' > $@
+	sed '56s/^.*$$/0.312727 0.329023/' < 10deg |\
+		sed -e 's/^/{/' -e 's/ /, /' -e 's/$$/},/' | \
+		sed '$$s/,$$//' > $@
 
 10deg-rgb.i: generate-table 10deg
 	./generate-table > $@

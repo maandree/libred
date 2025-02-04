@@ -250,21 +250,6 @@ int libred_get_colour(long int, double *, double *, double *);
 int libred_get_colour_xy(long int, double *, double *);
 
 /**
- * Calculate the colour temperature from its CIE xy values
- * 
- * @param   x        The CIE x value for the colour temperature
- * @param   y        The CIE y value for the colour temperature
- * @param   x_error  Output parameter for the absolute error in
- *                   the CIE x value of the returned colour
- *                   temperature; may be `NULL`
- * @param   y_error  Output parameter for the absolute error in
- *                   the CIE y value of the returned colour
- *                   temperature; may be `NULL`
- * @return           The closest matching colour temperature
- */
-double libred_get_temperature_xy(double, double, double *, double *);
-
-/**
  * Calculate the colour temperature from its [0, 1] sRGB values
  * 
  * @param   r        The sRGB “red” value for the colour temperature
@@ -287,6 +272,21 @@ double libred_get_temperature_xy(double, double, double *, double *);
  * @return           The closest matching colour temperature
  */
 double libred_get_temperature(double, double, double, double *, double *, double *, double *);
+
+/**
+ * Calculate the colour temperature from its CIE xy values
+ * 
+ * @param   x        The CIE x value for the colour temperature
+ * @param   y        The CIE y value for the colour temperature
+ * @param   x_error  Output parameter for the absolute error in
+ *                   the CIE x value of the returned colour
+ *                   temperature; may be `NULL`
+ * @param   y_error  Output parameter for the absolute error in
+ *                   the CIE y value of the returned colour
+ *                   temperature; may be `NULL`
+ * @return           The closest matching colour temperature
+ */
+double libred_get_temperature_xy(double, double, double *, double *);
 
 
 

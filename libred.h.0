@@ -8,7 +8,8 @@ libred.h \- Solar elevation and blackbody colour calculation
 .fi
 .PP
 Link with
-.IR -lred .
+.I -lred
+.IR -lm .
 .SH DESCRIPTION
 The
 .I <libred.h>
@@ -116,11 +117,21 @@ It is night only if the Sun's apparent elevation is negative.
 This header defines the following functions:
 .TP
 *
-.BR libred_solar_elevation (3)
+.BR libred_get_colour (3)
 .TP
 *
-.BR libred_get_colour (3)
+.BR libred_get_colour_xy (3)
+.TP
+*
+.BR libred_get_temperature (3)
+.TP
+*
+.BR libred_get_temperature (3)
+.TP
+*
+.BR libred_solar_elevation (3)
 .SH SEE ALSO
 .BR libred (7),
-.BR libred_solar_elevation (3),
-.BR libred_get_colour (3)
+.BR libred_get_colour (3),
+.BR libred_get_temperature (3),
+.BR libred_solar_elevation (3)
