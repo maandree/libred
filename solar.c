@@ -26,6 +26,46 @@
 double libred_solar_elevation(double latitude, double longitude, double *elevation);
 
 
+#if !defined(_POSIX_TIMERS)
+# ifndef CLOCK_REALTIME_COARSE
+#  define CLOCK_REALTIME_COARSE 0
+# endif
+# ifndef CLOCK_REALTIME
+#  define CLOCK_REALTIME 0
+# endif
+# if defined(_WIN32)
+#  include <windows.h>
+int
+clock_gettime(int clockid, struct timespec *ts)
+{
+	/* https://learn.microsoft.com/en-us/windows/win32/sysinfo/file-times */
+	FILETIME ft;
+	ULARGE_INTEGER u64;
+	(void) clockid;
+	GetSystemTimePreciseAsFileTime(&ft);
+	u64.LowPart = ft.dwLowDateTime;
+	u64.HighPart = ft.dwHighDateTime;
+	ts->tv_sec = (time_t)(uli.QuadPart / 100000000ULL - 11644473600ULL);
+	ts->tv_nsec = (long)(uli.QuadPart % 100000000ULL * 10ULL);
+	return 0;
+}
+# else
+#  include <sys/time.h>
+int
+clock_gettime(int clockid, struct timespec *ts)
+{
+	struct timeval tv;
+	(void) clockid;
+        if (gettimeofday(&tv, NULL))
+		return -1;
+	ts->tv_sec = tv.tv_sec;
+	ts->tv_nsec = tv.tv_usec * 1000;
+        return 0;
+}
+# endif
+#endif
+
+
 /**
  * Get current Julian Centuries time (100 Julian Days since J2000)
  * and Julian Day time
