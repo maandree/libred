@@ -1,5 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 #include "libred.h"
+#undef libred_solar_elevation
 #include <math.h>
 #include <time.h>
 #include <errno.h>
@@ -19,6 +20,10 @@
 # endif
 # define CLOCK_REALTIME_COARSE  CLOCK_REALTIME
 #endif
+
+
+/* old erroneous function declarations: */
+double libred_solar_elevation(double latitude, double longitude, double *elevation);
 
 
 /**
@@ -297,14 +302,24 @@ solar_elevation_from_time(double tc, double td, double latitude, double longitud
  * @return             0 on success, -1 on failure
  * @throws             Any error specified for clock_gettime(3) on error
  */
-double
-libred_solar_elevation(double latitude, double longitude, double *elevation)
+int
+libred_solar_elevation__int(double latitude, double longitude, double *elevation)
 {
 	double tc, td;
 	if (julian_time(&tc, &td))
 		return -1;
 	*elevation = degrees(solar_elevation_from_time(tc, td, latitude, longitude));
 	return 0;
+}
+
+/**
+ * Kept for binary compatibility
+ */
+double
+libred_solar_elevation(double latitude, double longitude, double *elevation)
+{
+	int r = libred_solar_elevation__int(latitude, longitude, elevation);
+	return (double)r;
 }
 
 /**

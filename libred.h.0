@@ -126,7 +126,7 @@ This header defines the following functions:
 .BR libred_get_temperature (3)
 .TP
 *
-.BR libred_get_temperature (3)
+.BR libred_get_temperature_xy (3)
 .TP
 *
 .BR libred_solar_elevation (3)

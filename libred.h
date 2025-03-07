@@ -3,6 +3,9 @@
 #define LIBRED_H
 
 
+/* bug fix: */
+#define libred_solar_elevation  libred_solar_elevation__int
+
 
 /**
  * Approximate apparent size of the Sun in degrees
@@ -143,7 +146,7 @@
  * @return             0 on success, -1 on failure
  * @throws             Any error specified for clock_gettime(3) on error
  */
-double libred_solar_elevation(double, double, double *);
+int libred_solar_elevation(double, double, double *);
 
 
 /**
