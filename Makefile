@@ -94,4 +94,4 @@ clean:
 .SUFFIXES:
 .SUFFIXES: .c .o .lo
 
-.PHONY: all check install uninstall clean
+.PHONY: all install uninstall clean
