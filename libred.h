@@ -95,7 +95,7 @@
  * Test whether it is amateur astronomical twilight
  * 
  * @param   ELEV:double  The current elevation
- * @return               1 if is amatuer astronomical twilight, 0 otherwise
+ * @return               1 if is amateur astronomical twilight, 0 otherwise
  */
 #define LIBRED_IS_AMATEUR_ASTRONOMICAL_TWILIGHT(ELEV)  ((-18.0 <= (ELEV)) && ((ELEV) <= -15.0))
 
@@ -209,8 +209,8 @@ int libred_check_timetravel(void);
  * @param   r     Output parameter for the “red” value
  * @param   g     Output parameter for the green value
  * @param   b     Output parameter for the blue value
- * @return        0 on succeess, -1 on error
- * 
+ * @return        0 on success, -1 on error
+ *
  * @throws  EDOM  The selected temperature is below 1000K
  */
 int libred_get_colour(long int, double *, double *, double *);
@@ -246,8 +246,8 @@ int libred_get_colour(long int, double *, double *, double *);
  * @param   temp  The desired colour temperature
  * @param   x     Output parameter for the x value
  * @param   y     Output parameter for the y value
- * @return        0 on succeess, -1 on error
- * 
+ * @return        0 on success, -1 on error
+ *
  * @throws  EDOM  The selected temperature is below 1000K
  */
 int libred_get_colour_xy(long int, double *, double *);

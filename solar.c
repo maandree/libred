@@ -45,8 +45,8 @@ clock_gettime(int clockid, struct timespec *ts)
 	GetSystemTimePreciseAsFileTime(&ft);
 	u64.LowPart = ft.dwLowDateTime;
 	u64.HighPart = ft.dwHighDateTime;
-	ts->tv_sec = (time_t)(uli.QuadPart / 100000000ULL - 11644473600ULL);
-	ts->tv_nsec = (long)(uli.QuadPart % 100000000ULL * 10ULL);
+	ts->tv_sec = (time_t)(u64.QuadPart / 100000000ULL - 11644473600ULL);
+	ts->tv_nsec = (long)(u64.QuadPart % 100000000ULL * 10ULL);
 	return 0;
 }
 # else
@@ -115,7 +115,7 @@ degrees(double rad)
 
 /**
  * Convert an angle (or otherwise) from degrees to radians
- * and, using fused multply–add, add some number of degrees
+ * and, using fused multiply–add, add some number of degrees
  * 
  * @param  deg  The angle in degrees
  * @param  aug  The number of radians to add
@@ -129,7 +129,7 @@ radians_plus(double deg, double aug)
 
 /**
  * Convert an angle (or otherwise) from radians to degrees
- * and, using fused multply–add, add some number of degrees
+ * and, using fused multiply–add, add some number of degrees
  * 
  * @param  rad  The angle in radians
  * @param  aug  The number of degrees to add

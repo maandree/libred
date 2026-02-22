@@ -19,7 +19,7 @@ and symbolic constants in this header are suitable for use in
 .B #if
 preprocessing directives.
 .PP
-This header defines the follow symbolic constants:
+This header defines the following symbolic constants:
 .TP
 .B LIBRED_SOLAR_APPARENT_RADIUS
 The approximate apparent size of the Sun in degrees. This
@@ -58,13 +58,13 @@ failing and setting
 .B errno
 to
 .BR EDOM .
-Currently this value 1000, hypothetical changes will be very small.
+Currently this value is 1000, hypothetical changes will be very small.
 .TP
 .B LIBRED_DELTA_TEMPERATURE
-The temperatures differences between sequential colour temperatures
-in the colour temperatures look up table. Currently this value is 100.
+The temperature differences between sequential colour temperatures
+in the colour temperatures lookup table. Currently this value is 100.
 .PP
-This header defines the follow macros:
+This header defines the following macros:
 .TP
 .BR LIBRED_IS_TWILIGHT "(const double)"
 Evaluates to 1 if the given expression is between -18.0 and 0.0 (this is,
@@ -74,7 +74,7 @@ and
 .BR LIBRED_SOLAR_ELEVATION_SUNSET_SUNRISE ),
 inclusively, otherwise, this macro evaluates to 0. The input should be the
 Sun's apparent elevation, and the macro evaluates to 1 if it is currently
-twilight. The given expression is evaluted either once or twice, therefore,
+twilight. The given expression is evaluated either once or twice, therefore,
 it must not have side-effects.
 .TP
 .BR LIBRED_IS_CIVIL_TWILIGHT "(const double)"
@@ -85,7 +85,7 @@ and
 .BR LIBRED_SOLAR_ELEVATION_SUNSET_SUNRISE ),
 inclusively, otherwise, this macro evaluates to 0. The input should be the
 Sun's apparent elevation, and the macro evaluates to 1 if it is currently
-civil twilight. The given expression is evaluted either once or twice,
+civil twilight. The given expression is evaluated either once or twice,
 therefore, it must not have side-effects.
 .TP
 .BR LIBRED_IS_NAUTICAL_TWILIGHT "(const double)"
@@ -96,7 +96,7 @@ and
 .BR LIBRED_SOLAR_ELEVATION_CIVIL_DUSK_DAWN ),
 inclusively, otherwise, this macro evaluates to 0. The input should be the
 Sun's apparent elevation, and the macro evaluates to 1 if it is currently
-nautical twilight. The given expression is evaluted either once or twice,
+nautical twilight. The given expression is evaluated either once or twice,
 therefore, it must not have side-effects.
 .TP
 .BR LIBRED_IS_ASTRONOMICAL_TWILIGHT "(const double)"
@@ -107,7 +107,7 @@ and
 .BR LIBRED_SOLAR_ELEVATION_NAUTICAL_DUSK_DAWN ),
 inclusively, otherwise, this macro evaluates to 0. The input should be the
 Sun's apparent elevation, and the macro evaluates to 1 if it is currently
-astronomical twilight. The given expression is evaluted either once or twice,
+astronomical twilight. The given expression is evaluated either once or twice,
 therefore, it must not have side-effects.
 .PP
 Note that the intervals are closed, and hence their boundaries overlap.
